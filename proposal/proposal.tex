@@ -1,5 +1,6 @@
 \documentclass[11pt]{article}
 
+\usepackage{enumerate}
 \usepackage{hyperref}
 
 \setlength{\textwidth}{430pt}\setlength{\oddsidemargin}{11pt}
@@ -27,15 +28,19 @@ However, this creates a problem, specifically, in the decision of which algorith
 In order to analyze if a choice of algorithm was the most efficient, one has to implement this algorithm then compare it against the other options,
 which is what we plan to do.
 In our case, we plan to implement
-the lossless data compression algorithm, Bit Code Complete Binary Tree (BCCBT), described in this paper. 
+the lossless data compression algorithm, Bit Code Complete Binary Tree (BCCBT), proposed in our first referenced paper. 
 We will then compare this implementation against other sophisticated compression utilities,
 such as Huffman encoding, the Lempel-Ziv family of algorithms, Dynamic Markov Compression, and Arithmetic Encoding.
+We will mainly follow the first referenced paper, since we plan to implement the algorithm proposed in this paper,
+however, we plan to use the other two papers as inspiration for potential tests to analyze our implementation of BCCBT.
+In the end, the goals of this project are to gain insight into the different measures used to analyze compression algorithms,
+and to gain experience in implementing compression algorithms that are to be used in practical scenarios.
 
 \subsection*{Papers and References}
-\begin{itemize}
-  \item Paper: A study in compression algorithms\\
+\begin{enumerate}[(1)]
+\item Paper: A study in compression algorithms \\
         Author: Mattias Håkansson Sjöstrand\\ 
-        \href{http://bth.diva-portal.org/smash/record.jsf?faces-redirect=true&aq2=%5B%5B%5D%5D&af=%5B%5D&searchType=SIMPLE&language=en&pid=diva2%3A830266&aq=%5B%5B%5D%5D&sf=all&aqe=%5B%5D&sortOrder=author_sort_asc&onlyFullText=false&noOfRows=50&dswid=482}{Link to paper}
+        \href{http://bth.diva-portal.org/smash/record.jsf?faces-redirect=true&aq2=\%5B\%5B\%5D\%5D\&af=\%5B\%5D\&searchType=SIMPLE\&language=en\&pid=diva2\%3A830266\&aq=\%5B\%5B\%5D\%5D\&sf=all\&aqe=\%5B\%5D\&sortOrder=author\_sort\_asc\&onlyFullText=false\&noOfRows=50\&dswid=482}{Link to paper}
   
   \item Paper: Comparison Study of Lossless Data Compression Algorithms for Text Data \\
         Authors: A. Bhattacharjee, T. Bej, S. Agarwal\\ 
@@ -43,9 +48,8 @@ such as Huffman encoding, the Lempel-Ziv family of algorithms, Dynamic Markov Co
   
   \item Paper: Comparison of lossless data compression methods \\
         Authors: D. Berz, M. Engstler, M. Heindl, F. Waibel\\
-        \href{https://www.researchgate.net/publication/335572104_Comparison_of_lossless_data_compression_methods}{Link to paper}
-
-\end{itemize}
+        \href{https://www.researchgate.net/publication/335572104\_Comparison\_of\_lossless\_data\_compression\_methods}{Link to paper}
+\end{enumerate}
 
 \newpage
 % I might have autism - P(a) = .9, =)
