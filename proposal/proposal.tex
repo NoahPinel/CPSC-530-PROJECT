@@ -5,7 +5,7 @@
 
 \setlength{\textwidth}{430pt}\setlength{\oddsidemargin}{11pt}
 
-\title{CPSC 530 \\ \Large Group 17 Project Proposal}
+\title{CPSC 530 \\ \Large Group 17 - Project Proposal}
 \author{
 Aiden Taylor - 30092686 - Computer Science
 \and
@@ -22,10 +22,10 @@ Ty Irving - 30105319 - Computer Science
 
 \section*{Introduction to the Topic}
 %Introduction to the topic and what you would like to study/do, and identifying the main paper(s)/reference(s) that you will be using.
-The proposed project concerns the design and analysis of algorithms used in Data Compression.
+The proposed project concerns the implementation and analysis of algorithms used in Data Compression.
 When storing, transferring, sending, or receiving large files it is important to have efficient data compression and decompression algorithms.
 However, this creates a problem, specifically, in the decision of which algorithm to use in different scenarios.
-In order to analyze if a choice of algorithm was the most efficient, one has to implement this algorithm then compare it against the other options,
+In order to analyze if a choice of algorithm was the most efficient, one has to implement this algorithm, then compare it against the other options,
 which is what we plan to do.
 In our case, we plan to implement
 the lossless data compression algorithm, Bit Code Complete Binary Tree (BCCBT), proposed in our first referenced paper. 
@@ -33,7 +33,7 @@ We will then compare this implementation against other sophisticated compression
 such as Huffman encoding, the Lempel-Ziv family of algorithms, Dynamic Markov Compression, and Arithmetic Encoding.
 We will mainly follow the first referenced paper, since we plan to implement the algorithm proposed in this paper,
 however, we plan to use the other two papers as inspiration for potential tests to analyze our implementation of BCCBT.
-In the end, the goals of this project are to gain insight into the different measures used to analyze compression algorithms,
+In the end, the goals of this project are to gain insight into the different factors and tests used to analyze compression algorithms,
 and to gain experience in implementing compression algorithms that are to be used in practical scenarios.
 
 \subsection*{Papers and References}
@@ -57,32 +57,34 @@ and to gain experience in implementing compression algorithms that are to be use
 \section*{Outline of Proposed Work and Implementation}
 
 \subsection*{Proposed Work}
-The following is a basic outline of what needs to be done to complete this project:
-      \begin{enumerate}[(i)]
-            \item Analysis of BCCBT algorithm and its pseudocode.
-            \item Implement the BCCBT algorithm. 
-            \item Compare our implementation of BCCBT against other compression utilities.
-            \item Compile the analysis and results of our comparisons into a 7-10 page technical paper.
-            \item Design 3 quiz questions that are relevant to our paper.
-            \item Create a presentation that summarizes the main results of our paper.
+The following is the work that needs to be done to complete this project:
+      \begin{enumerate}[1.]
+            \item An analysis of the BCCBT algorithm and its pseudocode.
+            \item An implementation of the BCCBT algorithm. 
+            \item A comparison of our implementation of BCCBT against other compression utilities.
+            \item A compilation of the comparison results into a 7-10 page technical paper.
+            \item The design of three quiz questions that are relevant to our paper.
+            \item A presentation that summarizes the main results of our paper.
       \end{enumerate}
 
 \subsection*{Implementation}
-In our implementation we will be working on implementing the algorithm this will be done using a language
-of our choice.  Once we are successfully able to implement the algorithm and have a way to compress and 
-decompress files we will be working on analyzing multiple factors of the algorithm during run time and
-comparing these factors with other algorithms that are commonly used for compression the factors we will be 
-using are as follows
+We will first focus on implementing the BCCBT algorithm, which will be written in a
+group agreed upon programming language.
+Once we have successfully implemented the algorithm, and have a way to compress and 
+decompress files with this algorithm,
+we will begin analyzing our implementation by testing it with multiple data compression factors.
+We will then compare these results against other commonly used compression algorithms mentioned above.
+Some of the factors we will be using to analyze and compare these algorithms are as follows:
       \begin{enumerate}
             \item Compression Time 
             \item Decompression Time
             \item Saving Percentage = $\frac{Original\ File\ Size\ -\ Compressed\ File\ Size}{Original\ File\ Size}$
             \item Compression Ratio = $\frac{Compressed\ File\ Size}{Original\ File\ Size}$
       \end{enumerate}
-Using these factors we will successfully be able to see in what situations certain algorithms should and shouldn't be used.
-During our testing we plan on mainly using different size txt files in order to see if there are any changes in the factors 
-we will be measuring however if time allows different types of files could be
-incorporated in order to test the compression algorithm on a wide variety of data
+Using these factors we will be able to see in what scenarios certain algorithms should and should not be used,
+and we will be able to tell if our choice of algorithm was the most efficient, in the given scenario.
+During our comparison testing, we plan on using different size .txt files
+as our sources of information, however, if time permits, we may incorporate other file types as well.
 %Remove first section and include some specific factors and info
 
 %The following is how we plan to implement the main tasks of this project:
