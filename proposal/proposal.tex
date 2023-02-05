@@ -48,37 +48,50 @@ and to gain experience in implementing compression algorithms that are to be use
   
   \item Paper: Comparison of lossless data compression methods \\
         Authors: D. Berz, M. Engstler, M. Heindl, F. Waibel\\
-        \href{https://www.researchgate.net/publication/335572104\_Comparison\_of\_lossless\_data\_compression\_methods}{Link to paper}
+        \href{https://www.researchgate.net/publication/335572104_Comparison_of_lossless_data_compression_methods}{Link to paper}
 \end{enumerate}
 
 \newpage
 % I might have autism - P(a) = .9, =) (no shit - aiden)
 % Outline of the proposed work and implementation/experiments for the project.
 \section*{Outline of Proposed Work and Implementation}
-What is important is how we will be implementing experiments for this project and how this will
-help us understand which algorithms are most efficient.  The way that we will be doing this is by
-using implementing the lossless data compression algorithm Bit Code Complete Binary Tree (BCCBT) 
-along with other compression techniques and testing multiple factors when files are compressed and 
-decompressed using these.  By being able to compare these factors that we will get by compressing and
-decompressing files we will be able to evaluate when certain algorithms are used for any given scenario.
-In order to be able to properly test and ensure that we have multiple different types of inputs to begin 
-compressing and decompressing multiple different file types of sizes and content will be used in order to 
-see if there is any effect on how certain files compare when using specific algorithms and if there is a case
-where one will be used over another this should be evident when comparing the different types of 
-factors against each other for the different types of algorithms.
+
 \subsection*{Proposed Work}
 The following is a basic outline of what needs to be done to complete this project:
-\begin{enumerate}[(i)]
-\item Analysis of BCCBT algorithm and its pseudocode.
-\item Implement the BCCBT algorithm. 
-\item Compare our implementation of BCCBT against other compression utilities.
-\item Compile the analysis and results of our comparisons into a 7-10 page technical paper.
-\item Design 3 quiz questions that are relevant to our paper.
-\item Create a presentation that summarizes the main results of our paper.
-\end{enumerate}
+      \begin{enumerate}[(i)]
+            \item Analysis of BCCBT algorithm and its pseudocode.
+            \item Implement the BCCBT algorithm. 
+            \item Compare our implementation of BCCBT against other compression utilities.
+            \item Compile the analysis and results of our comparisons into a 7-10 page technical paper.
+            \item Design 3 quiz questions that are relevant to our paper.
+            \item Create a presentation that summarizes the main results of our paper.
+      \end{enumerate}
+
 \subsection*{Implementation}
-The following is how we plan to implement the main tasks of this project:
-\begin{enumerate}[(i)]
-\item % TODO: Summarize into points that relate to the proposed work
-\end{enumerate}
+In our implementation we will be working on implementing the algorithm this will be done using a language
+of our choice.  Once we are successfully able to implement the algorithm and have a way to compress and 
+decompress files we will be working on analyzing multiple factors of the algorithm during run time and
+comparing these factors with other algorithms that are commonly used for compression the factors we will be 
+using are as follows
+      \begin{enumerate}
+            \item Compression Time 
+            \item Decompression Time
+            \item Saving Percentage = $\frac{Original\ File\ Size\ -\ Compressed\ File\ Size}{Original\ File\ Size}$
+            \item Compression Ratio = $\frac{Compressed\ File\ Size}{Original\ File\ Size}$
+      \end{enumerate}
+Using these factors we will succesfully be able to see in what situations certain algorithms should and shouldn't be used.
+During our testing we plan on mainly using different size txt files in order to see if there is any
+changes in the factors we will be measuring however if time allows different types of files could be
+incorporated in order to test the compression algorithm on a wide variety of data
+%Remove first section and include some specific factors and info
+
+%The following is how we plan to implement the main tasks of this project:
+
+
+%      \begin{enumerate}[(i)]
+%            \item Create algorithm that functions to compress different files
+%            \item Analyze different factors of the created algorithm while its being run
+%            \item Create presentation with \LaTeX
+%     \end{enumerate}
+
 \end{document}
