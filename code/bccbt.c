@@ -1,9 +1,7 @@
 // TODO:
 // - Encoding Portion
 // - Decoding Portion
-// 	- Need Frequency Table for both
-// 	- Need Complete Binary Tree for both
-// - Find/implement lossless algorithm
+// - Find other lossless algorithm (pseudocode says we need another one?)
 
 #include <stdio.h>
 #include <stdlib.h>
