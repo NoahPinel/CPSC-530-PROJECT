@@ -33,33 +33,31 @@ int main(int argc, char *argv[])
 }
 
 
-	/*
-	ENCODING
-		Get the frequency of each symbol from the input stream
-		Set the frequency table to the frequency of each symbol
-		Create a complete binary tree using the frequency table
-		Set the bit codes according to where the symbols are in the tree
-		While more symbols to read from the input stream
-			Read one symbol from the input stream
-			Write the symbol’s bit code to the bit code stream
-			Write the length of the bit code to the level stream
-		Compress the level stream with a lossless algorithm
-		Write the frequency table to the output stream
-		Write the compressed level stream and the bit code stream to the output
-		stream 
-	*/
+/*
+ENCODING
+	Initialize the complete binary tree
+	While more symbols to read from the input stream
+		Read one symbol from the input stream
+		Get the symbol’s bit code from the complete binary tree
+		Write the symbol’s bit code to the bit code stream
+		Write the length of the bit code to the level stream
+		Move the symbol to the root node of the complete binary tree
+	Compress the level stream with a lossless algorithm
+	Write the compressed level stream and the bit code stream to the output
+	stream
+*/
 
-	/*
-	DECODING
-		Read the frequency table from the input stream
-		Create a complete binary tree using the frequency table
-		Read the compressed level stream from the input stream
-		Uncompress the compressed level stream
-		Read the bit code stream from the input stream
-		While more levels to read from the level stream
-			Read one level from the level stream
-			Read level bits from bit code stream
-			Find the symbol in the complete binary tree using the level and
-			the bit code
-			Write the symbol to the output stream
-	*/
+/*
+DECODING
+	Initialize the complete binary tree
+	Read the compressed level stream from the input stream
+	Uncompress the compressed level stream
+	Read the bit code stream from the input stream
+	While more levels to read from the level stream
+		Read one level from the level stream
+		Read level bits from bit code stream
+		Find the symbol in the complete binary tree using the level and
+		the bit code
+		Move the symbol to the root node
+		Write the symbol to the output stream 
+*/
