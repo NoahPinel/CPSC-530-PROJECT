@@ -128,24 +128,31 @@ struct node* insertRight(struct node* root, int value) {
 // ====================================== End of copied code ========================================
 
 
-/* Main Function */
+// Main Function
 int main(int argc, char *argv[])
 {
 	// Checking usage
-	if(argc != 3)
+	if(argc != 6)
 	{
-		printf("Usage: %s FILEPATH ENCODE(0)/DECODE(1)",argv[0]);
+		printf("Usage: %s FILEPATH BITCODES LEVELS FREQUENCY ENCODE(0)/DECODE(1)",argv[0]);
 		return 0;
 	}
 
-	// Encode
-	if(!atoi(argv[2]))
+	// Encoding
+	if(!atoi(argv[argc-1]))
 	{
+		// TODO (Aiden): Create frequency table
+		// ...
+		// TODO (Aiden): Initialize Complete Binary Tree
 		// ...
 	}
-	// Decode
+	// Decoding
 	else
 	{
+		// TODO (Aiden): Read frequency table
+		// ...
+		// TODO (Aiden): Initialize Complete Binary Tree
+		// (Create function for this since done in at least two places)
 		// ...
 	}
 
