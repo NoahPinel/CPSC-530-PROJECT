@@ -2,15 +2,16 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define DEBUG 1
+#define DEBUG TRUE
+#define TEST TRUE
 
 // ==================================================================================================
-// Key Value Dictionary implementation copied from:
+// Key Value Dictionary implementation adapted from:
 // https://gist.githubusercontent.com/kylef/86784/raw/fe97567ec9baf5c0dce3c7fcbec948e21dfcce09/dict.c
 
 typedef struct dict_t_struct {
-	char *key;
-	void *value;
+	unsigned char key;
+	int value;
 	struct dict_t_struct *next;
 } dict_t;
 
@@ -22,21 +23,21 @@ void dictDealloc(dict_t **dict) {
 	free(dict);
 }
 
-void *getItem(dict_t *dict, char *key) {
+int getItem(dict_t *dict, unsigned char key) {
 	dict_t *ptr;
 	for (ptr = dict; ptr != NULL; ptr = ptr->next) {
-		if (strcmp(ptr->key, key) == 0) {
+		if (ptr->key == key) {
 			return ptr->value;
 		}
 	}
 
-	return NULL;
+	return 0;
 }
 
-void delItem(dict_t **dict, char *key) {
+void delItem(dict_t **dict, unsigned char key) {
 	dict_t *ptr, *prev;
 	for (ptr = *dict, prev = NULL; ptr != NULL; prev = ptr, ptr = ptr->next) {
-		if (strcmp(ptr->key, key) == 0) {
+		if (ptr->key == key) {
 			if (ptr->next != NULL) {
 				if (prev == NULL) {
 					*dict = ptr->next;
@@ -49,7 +50,6 @@ void delItem(dict_t **dict, char *key) {
 				*dict = NULL;
 			}
 
-			free(ptr->key);
 			free(ptr);
 
 			return;
@@ -57,17 +57,16 @@ void delItem(dict_t **dict, char *key) {
 	}
 }
 
-void addItem(dict_t **dict, char *key, void *value) {
+void addItem(dict_t **dict, unsigned char key, int value) {
 	delItem(dict, key); /* If we already have a item with this key, delete it. */
 	dict_t *d = malloc(sizeof(struct dict_t_struct));
-	d->key = malloc(strlen(key)+1);
-	strcpy(d->key, key);
+	d->key = key;
 	d->value = value;
 	d->next = *dict;
 	*dict = d;
 }
 
-// ====================================== End of copied code ========================================
+// ====================================== End of adapted code =======================================
 
 // ==================================================================================================
 // Binary Tree Implementation copied from:
@@ -131,31 +130,77 @@ struct node* insertRight(struct node* root, int value) {
 // Main Function
 int main(int argc, char *argv[])
 {
+	FILE *fp;
+
 	// Checking usage
 	if(argc != 6)
 	{
-		printf("Usage: %s FILEPATH BITCODES LEVELS FREQUENCY ENCODE(0)/DECODE(1)",argv[0]);
+		// If ENCODING:
+		// - Need to pass Filepath of file to compress
+		// - Need to pass 0 to indicate encoding
+		// If DECODING
+		// - Need to pass Bitcodes of a compressed file
+		// - Need to pass Level codes of a compressed file
+		// - Need to pass order of Frequency table of a compressed file
+		// - Need to pass 1 to indicate decoding
+		printf("Usage: %s FILEPATH BITCODES LEVELS FREQUENCY ENCODE(0)/DECODE(1)\n",argv[0]);
 		return 0;
 	}
+
+	// Both parts need a frequency table and binary tree
+	dict_t **dict = dictAlloc();
 
 	// Encoding
 	if(!atoi(argv[argc-1]))
 	{
-		// TODO (Aiden): Create frequency table
+		// Check if files readable
+		if((fp = fopen(argv[1],"r")) == NULL)
+			return 1;
+
+		// Read file character by character filling the frequency table
+		int c;
+		int value;
+		while((c=fgetc(fp)) != EOF)
+		{
+			unsigned char ch = c;
+			// If the character is not already in the table then add it
+			if((value = getItem(*dict, ch)) == 0)
+				addItem(dict, ch, 1);
+			// Else increment the characters frequency by 1
+			else
+			{
+				value++;
+				addItem(dict, ch, value);
+			}
+		}
+#ifdef TEST
+		// Print off frequency table by looping through ascii codes
+		int test_value;
+		for(int k = 0; k < 255 ; k++)
+		{
+			unsigned char test_ch = k;
+			if((test_value = getItem(*dict, test_ch)) != 0)
+				printf("%c : %d\n", test_ch, test_value);
+		}
+#endif
+
+
+		// TODO (Aiden): Fill Complete Binary Tree
 		// ...
-		// TODO (Aiden): Initialize Complete Binary Tree
-		// ...
+
+		fclose(fp);
 	}
 	// Decoding
 	else
 	{
 		// TODO (Aiden): Read frequency table
 		// ...
-		// TODO (Aiden): Initialize Complete Binary Tree
+		// TODO (Aiden): Fill Complete Binary Tree
 		// (Create function for this since done in at least two places)
 		// ...
 	}
 
+	dictDealloc(dict);
 	return 0;
 }
 
