@@ -6,6 +6,19 @@
 #define TEST TRUE
 
 // ==================================================================================================
+// Integer array copy function adapted from:
+// https://stackoverflow.com/questions/8287109/how-to-copy-one-integer-array-to-another
+
+int * intdup(int const * src, size_t len)
+{
+	int * p = malloc(len * sizeof(int));
+	memcpy(p, src, len * sizeof(int));
+	return p;
+}
+
+// ====================================== End of adapted code =======================================
+
+// ==================================================================================================
 // Key Value Dictionary implementation adapted from:
 // https://gist.githubusercontent.com/kylef/86784/raw/fe97567ec9baf5c0dce3c7fcbec948e21dfcce09/dict.c
 
@@ -69,11 +82,13 @@ void addItem(dict_t **dict, unsigned char key, int value) {
 // ====================================== End of adapted code =======================================
 
 // ==================================================================================================
-// Binary Tree Implementation copied from:
+// Binary Tree Implementation adapted from:
 // https://www.programiz.com/dsa/binary-tree
 
 struct node {
 	unsigned char item;
+	int level;
+	int *code_word;
 	struct node* left;
 	struct node* right;
 };
@@ -82,14 +97,20 @@ struct node {
 void inorderTraversal(struct node* root) {
 	if (root == NULL) return;
 	inorderTraversal(root->left);
-	printf("%c ->", root->item);
+	//printf("%c ->", root->item);
+	printf("%c : ", root->item);
+	for(int i = 0; i < root->level + 1; i++) printf("%d",root->code_word[i]);
+	printf(" ->");
 	inorderTraversal(root->right);
 }
 
 // Preorder traversal
 void preorderTraversal(struct node* root) {
 	if (root == NULL) return;
-	printf("%c ->", root->item);
+	//printf("%c ->", root->item);
+	printf("%c : ", root->item);
+	for(int i = 0; i < root->level + 1; i++) printf("%d",root->code_word[i]);
+	printf(" ->");
 	preorderTraversal(root->left);
 	preorderTraversal(root->right);
 }
@@ -99,13 +120,18 @@ void postorderTraversal(struct node* root) {
 	if (root == NULL) return;
 	postorderTraversal(root->left);
 	postorderTraversal(root->right);
-	printf("%c ->", root->item);
+	//printf("%c ->", root->item);
+	printf("%c : ", root->item);
+	for(int i = 0; i < root->level + 1; i++) printf("%d",root->code_word[i]);
+	printf(" ->");
 }
 
 // Create a new Node
-struct node* createNode(unsigned char value) {
+struct node* createNode(unsigned char value, int code_word[], int level) {
 	struct node* newNode = malloc(sizeof(struct node));
 	newNode->item = value;
+	newNode->level = level;
+	newNode->code_word = intdup(code_word, 9);
 	newNode->left = NULL;
 	newNode->right = NULL;
 
@@ -113,41 +139,48 @@ struct node* createNode(unsigned char value) {
 }
 
 // Insert on the left of the node
-struct node* insertLeft(struct node* root, unsigned char value) {
-	root->left = createNode(value);
+struct node* insertLeft(struct node* root, unsigned char value, int code_word[], int level) {
+	root->left = createNode(value,code_word,level);
 	return root->left;
 }
 
 // Insert on the right of the node
-struct node* insertRight(struct node* root, unsigned char value) {
-	root->right = createNode(value);
+struct node* insertRight(struct node* root, unsigned char value, int code_word[], int level) {
+	root->right = createNode(value,code_word,level);
 	return root->right;
 }
 
-// ====================================== End of copied code ========================================
+// ====================================== End of adpated code =======================================
 
 // Function that recursively fills a complete binary tree
-void fill_tree(struct node* root, int i, unsigned char freq_table[], int size)
+void fill_tree(struct node* root, int i, unsigned char freq_table[], int size, int level)
 {
 	// Get indicies for left and right child nodes
 	int left_child_index = 2*i+1;
 	int right_child_index = 2*i+2;
 
+	// Create int array to keep track of bitcodes for each symbol
+	int *code_word_left = intdup(root->code_word,9);
+	int *code_word_right = intdup(root->code_word,9);
+
 	// Since we are filling from left to right then check left child first
 	if(left_child_index > size-2) return;
 
 	// Insert left child node
-	struct node* left_child = insertLeft(root,freq_table[left_child_index]);
+	code_word_left[level] = 0;
+	struct node* left_child = insertLeft(root,freq_table[left_child_index],code_word_left,level);
 
 	// Now check if we have a right child node
 	if(right_child_index > size-2) return;
 	
 	// Insert right child node
-	struct node* right_child = insertRight(root,freq_table[right_child_index]);
+	code_word_right[level] = 1;
+	struct node* right_child = insertRight(root,freq_table[right_child_index],code_word_right,level);
 
 	// Recurse
-	fill_tree(left_child,left_child_index,freq_table,size);
-	fill_tree(right_child,right_child_index,freq_table,size);
+	level++;
+	fill_tree(left_child,left_child_index,freq_table,size,level);
+	fill_tree(right_child,right_child_index,freq_table,size,level);
 }
 
 
@@ -248,8 +281,10 @@ int main(int argc, char *argv[])
 #endif
 
 		// Initialize and fill Complete Binary Tree
-		struct node* root = createNode(freq_table[0]);
-		fill_tree(root,0,freq_table,sizeof(freq_table));
+		int code_word[9] = {-1}; // Initialized at -1 as root symbol doesn't need a bitcode
+		struct node* root = createNode(freq_table[0],code_word,0);
+		//int code_word[9];
+		fill_tree(root,0,freq_table,sizeof(freq_table),0);
 
 #ifdef TEST
 		printf("\nPreorder traversal:\n");
