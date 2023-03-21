@@ -73,7 +73,7 @@ void addItem(dict_t **dict, unsigned char key, int value) {
 // https://www.programiz.com/dsa/binary-tree
 
 struct node {
-	int item;
+	unsigned char item;
 	struct node* left;
 	struct node* right;
 };
@@ -82,14 +82,14 @@ struct node {
 void inorderTraversal(struct node* root) {
 	if (root == NULL) return;
 	inorderTraversal(root->left);
-	printf("%d ->", root->item);
+	printf("%c ->", root->item);
 	inorderTraversal(root->right);
 }
 
 // Preorder traversal
 void preorderTraversal(struct node* root) {
 	if (root == NULL) return;
-	printf("%d ->", root->item);
+	printf("%c ->", root->item);
 	preorderTraversal(root->left);
 	preorderTraversal(root->right);
 }
@@ -99,11 +99,11 @@ void postorderTraversal(struct node* root) {
 	if (root == NULL) return;
 	postorderTraversal(root->left);
 	postorderTraversal(root->right);
-	printf("%d ->", root->item);
+	printf("%c ->", root->item);
 }
 
 // Create a new Node
-struct node* createNode(value) {
+struct node* createNode(unsigned char value) {
 	struct node* newNode = malloc(sizeof(struct node));
 	newNode->item = value;
 	newNode->left = NULL;
@@ -113,18 +113,42 @@ struct node* createNode(value) {
 }
 
 // Insert on the left of the node
-struct node* insertLeft(struct node* root, int value) {
+struct node* insertLeft(struct node* root, unsigned char value) {
 	root->left = createNode(value);
 	return root->left;
 }
 
 // Insert on the right of the node
-struct node* insertRight(struct node* root, int value) {
+struct node* insertRight(struct node* root, unsigned char value) {
 	root->right = createNode(value);
 	return root->right;
 }
 
 // ====================================== End of copied code ========================================
+
+// Function that recursively fills a complete binary tree
+void fill_tree(struct node* root, int i, unsigned char freq_table[], int size)
+{
+	// Get indicies for left and right child nodes
+	int left_child_index = 2*i+1;
+	int right_child_index = 2*i+2;
+
+	// Since we are filling from left to right then check left child first
+	if(left_child_index > size-2) return;
+
+	// Insert left child node
+	struct node* left_child = insertLeft(root,freq_table[left_child_index]);
+
+	// Now check if we have a right child node
+	if(right_child_index > size-2) return;
+	
+	// Insert right child node
+	struct node* right_child = insertRight(root,freq_table[right_child_index]);
+
+	// Recurse
+	fill_tree(left_child,left_child_index,freq_table,size);
+	fill_tree(right_child,right_child_index,freq_table,size);
+}
 
 
 // Main Function
@@ -147,7 +171,7 @@ int main(int argc, char *argv[])
 		return 0;
 	}
 
-	// Both parts need a frequency table and binary tree
+	// Both parts need a frequency table
 	dict_t **dict = dictAlloc();
 
 	// Encoding
@@ -160,12 +184,16 @@ int main(int argc, char *argv[])
 		// Read file character by character filling the frequency table
 		int c;
 		int value;
+		int unique_chars = 0;
 		while((c=fgetc(fp)) != EOF)
 		{
 			unsigned char ch = c;
 			// If the character is not already in the table then add it
 			if((value = getItem(*dict, ch)) == 0)
+			{
 				addItem(dict, ch, 1);
+				unique_chars++;
+			}
 			// Else increment the characters frequency by 1
 			else
 			{
@@ -173,8 +201,10 @@ int main(int argc, char *argv[])
 				addItem(dict, ch, value);
 			}
 		}
+
 #ifdef TEST
 		// Print off frequency table by looping through ascii codes
+		printf("\nKey/value pairs for symbols from input file:\n");
 		int test_value;
 		for(int k = 0; k < 255 ; k++)
 		{
@@ -183,9 +213,54 @@ int main(int argc, char *argv[])
 				printf("%c : %d\n", test_ch, test_value);
 		}
 #endif
+		
+		// Define frequency table to order frequency of symbols
+		unsigned char freq_table[unique_chars+1];
+		memset(freq_table, '\0', unique_chars+1);
 
+		// Order frequencies of symbols
+		for(int i = 0; i < unique_chars; i++)
+		{
+			int max_value = 0;
+			unsigned char max_ch = 0;
+			for(int j = 0; j < 255; j++)
+			{
+				int value;
+				unsigned char ch = j;
+				if((value = getItem(*dict, ch)) != 0)
+				{
+					if(value > max_value)
+					{
+						max_value = value;
+						max_ch = ch;
+					}
+				}
+				
+			}
+			freq_table[i] = max_ch;
+			delItem(dict, max_ch); // Deleteing symbol so we can search for symbol with next highest freq
 
-		// TODO (Aiden): Fill Complete Binary Tree
+		}
+
+#ifdef TEST
+		printf("\nFrequency of symbols ordered:\n");
+		for(int i = 0; i < unique_chars; i++) printf("%c\n",freq_table[i]);
+#endif
+
+		// Initialize and fill Complete Binary Tree
+		struct node* root = createNode(freq_table[0]);
+		fill_tree(root,0,freq_table,sizeof(freq_table));
+
+#ifdef TEST
+		printf("\nPreorder traversal:\n");
+		preorderTraversal(root);
+		printf("\nPostorder traversal:\n");
+		postorderTraversal(root);
+		printf("\nInorder traversal:\n");
+		inorderTraversal(root);
+#endif
+
+		// TODO: ENCODE INPUT FILE USING BINARY TREE
 		// ...
 
 		fclose(fp);
