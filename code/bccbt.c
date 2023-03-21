@@ -168,19 +168,45 @@ void fill_tree(struct node* root, int i, unsigned char freq_table[], int size, i
 
 	// Insert left child node
 	code_word_left[level] = 0;
+	level++;
 	struct node* left_child = insertLeft(root,freq_table[left_child_index],code_word_left,level);
 
 	// Now check if we have a right child node
 	if(right_child_index > size-2) return;
 	
 	// Insert right child node
+	level--;
 	code_word_right[level] = 1;
+	level++;
 	struct node* right_child = insertRight(root,freq_table[right_child_index],code_word_right,level);
 
 	// Recurse
-	level++;
 	fill_tree(left_child,left_child_index,freq_table,size,level);
 	fill_tree(right_child,right_child_index,freq_table,size,level);
+}
+
+// Function that recursively searchs the complete binary tree for the desired symbol
+struct node* find_symbol(struct node* root, unsigned char c)
+{
+	// Check if NULL node
+	if(root == NULL)
+		return NULL;
+	// Check for symbol
+	if(root->item == c)
+		return root;
+
+	// Recurse down left subtree
+	struct node* left_subtree = find_symbol(root->left, c);
+
+	// See if symbol was in left subtree
+	if(left_subtree != NULL)
+		return left_subtree;
+
+	// Recurse down right subtree
+	struct node* right_subtree = find_symbol(root->right, c);
+
+	// Return result
+	return right_subtree;
 }
 
 
@@ -234,6 +260,7 @@ int main(int argc, char *argv[])
 				addItem(dict, ch, value);
 			}
 		}
+		fclose(fp);
 
 #ifdef TEST
 		// Print off frequency table by looping through ascii codes
@@ -283,7 +310,6 @@ int main(int argc, char *argv[])
 		// Initialize and fill Complete Binary Tree
 		int code_word[9] = {-1}; // Initialized at -1 as root symbol doesn't need a bitcode
 		struct node* root = createNode(freq_table[0],code_word,0);
-		//int code_word[9];
 		fill_tree(root,0,freq_table,sizeof(freq_table),0);
 
 #ifdef TEST
@@ -295,10 +321,29 @@ int main(int argc, char *argv[])
 		inorderTraversal(root);
 #endif
 
-		// TODO: ENCODE INPUT FILE USING BINARY TREE
-		// ...
+#ifdef TEST
+		struct node* test_node = NULL;
+		// Find symbol (change character in function argument to test different values)
+		if((test_node = find_symbol(root,'c')) != NULL)
+		{
+			// If bitcode starts with -1 then this is the root node
+			if(test_node->code_word[0] == -1)
+				printf("\n\nFound root symbol %c at level %d.",test_node->item,test_node->level);
+			else
+			{
+				printf("\n\nFound symbol %c at level %d which has bitcode: ",test_node->item,test_node->level);
+				for(int i = 0; i < test_node->level; i++) printf("%d",test_node->code_word[i]);
+				printf("\n");
+			}
+		}
+		else
+		{
+			printf("\n\nThis symbol could not be found.\n");
+		}
+#endif
+		// TODO: Can now encode input file symbol by symbol, need to write bitcodes of symbols to one file then levels to another file
+		// so they can be used as inputs for decoding portion
 
-		fclose(fp);
 	}
 	// Decoding
 	else
