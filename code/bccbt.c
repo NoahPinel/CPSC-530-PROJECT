@@ -185,6 +185,7 @@ void fill_tree(struct node* root, int i, unsigned char freq_table[], int size, i
 	fill_tree(right_child,right_child_index,freq_table,size,level);
 }
 
+// TODO: Change name to find_symbol_by_symbol.
 // Function that recursively searchs the complete binary tree for the desired symbol
 struct node* find_symbol(struct node* root, unsigned char c)
 {
@@ -209,6 +210,8 @@ struct node* find_symbol(struct node* root, unsigned char c)
 	return right_subtree;
 }
 
+// TODO: Make function find_symbol_by_bitcode
+// ...
 
 // Main Function
 int main(int argc, char *argv[])
@@ -219,14 +222,14 @@ int main(int argc, char *argv[])
 	if(argc != 6)
 	{
 		// If ENCODING:
-		// - Need to pass Filepath of file to compress
+		// - Need to pass Filepath of source file to compress
 		// - Need to pass 0 to indicate encoding
 		// If DECODING
 		// - Need to pass Bitcodes of a compressed file
 		// - Need to pass Level codes of a compressed file
 		// - Need to pass order of Frequency table of a compressed file
 		// - Need to pass 1 to indicate decoding
-		printf("Usage: %s FILEPATH BITCODES LEVELS FREQUENCY ENCODE(0)/DECODE(1)\n",argv[0]);
+		printf("Usage: %s SRCFILE BITCODES LEVELS FREQUENCIES ENCODE(0)/DECODE(1)\n",argv[0]);
 		return 0;
 	}
 
@@ -341,17 +344,29 @@ int main(int argc, char *argv[])
 			printf("\n\nThis symbol could not be found.\n");
 		}
 #endif
-		// TODO: Can now encode input file symbol by symbol, need to write bitcodes of symbols to one file then levels to another file
-		// so they can be used as inputs for decoding portion
+		// TODO:
+		// - Can now encode input file symbol by symbol.
+		// - Encoding of the file needs to be written to another file as a string of 1's and 0's (these will be 1 bit characters),
+		//   then pad the file so that the number of 1's and 0's is a multiple of 8,
+		//   then use python (https://stackoverflow.com/questions/7290943/write-a-string-of-1s-and-0s-to-a-binary-file)
+		//   to convert the string of 1's and 0's to a bytearray which can then be written as bits to a binary file.
+		// - The corresponding string of levels of the bitcodes in the binary tree needs to be written to a separate file
+		//   which can be compressed using a different lossless compression algorithm. (lz4 is a native linux compression tool)
 
 	}
 	// Decoding
 	else
 	{
-		// TODO (Aiden): Read frequency table
+		// TODO (Aiden): Read frequency table as a file (at most 256 characters)
 		// ...
 		// TODO (Aiden): Fill Complete Binary Tree
 		// (Create function for this since done in at least two places)
+		// ...
+		// TODO (Aiden): Create funtionality for searching binary tree using a given bitcode
+		// ...
+
+		// TODO: Decode compressed binary file bit by bit using levels input file.
+		// (https://stackoverflow.com/questions/2576712/using-python-how-can-i-read-the-bits-in-a-byte) might be useful.
 		// ...
 	}
 
