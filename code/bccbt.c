@@ -185,7 +185,7 @@ void fill_tree(struct node* root, int i, unsigned char freq_table[], int size, i
 	fill_tree(right_child,right_child_index,freq_table,size,level);
 }
 
-// Function that recursively searchs the complete binary tree for the desired symbol
+// Function that recursively searchs the complete binary tree for the desired symbol given a symbol
 struct node* find_symbol_by_symbol(struct node* root, unsigned char c)
 {
 	// Check if NULL node
@@ -209,14 +209,11 @@ struct node* find_symbol_by_symbol(struct node* root, unsigned char c)
 	return right_subtree;
 }
 
-// TODO: Make function find_symbol_by_bitcode
-// ...
-
 // Main Function
 int main(int argc, char *argv[])
 {
-	// Declare variables
-	FILE *src, *bitcodes, *bin, *lvls, *freqs;
+	// Declare variables used throughout main function
+	FILE *src, *bitcodes, *bin, *lvls, *freqs, *output;
 	int c, frequency, max_frequency, unique_chars;
 	unsigned char ch, max_ch;
 	struct node* symbol_node = NULL;
@@ -234,7 +231,7 @@ int main(int argc, char *argv[])
 		// - Need to pass Level codes to read binary file
 		// - Need to pass order of Frequency table to initialize complete binary tree
 		// - Need to pass 1 to indicate decoding
-		printf("Usage: %s SRCFILE BIN LEVELS FREQUENCIES ENCODE(0)/DECODE(1)\n",argv[0]);
+		printf("Usage: %s SRC BIN LVLS FREQS ENCODE(0)/DECODE(1)\n",argv[0]);
 		return 0;
 	}
 
@@ -318,7 +315,7 @@ int main(int argc, char *argv[])
 		fill_tree(root,0,freq_table,sizeof(freq_table),0);
 
 #ifdef TEST
-		// Test to make sure the Binary tree is in the correct order
+		// Test to make sure the Binary tree is in the correct order 
 		printf("\nPreorder traversal:\n");
 		preorderTraversal(root);
 		printf("\nPostorder traversal:\n");
@@ -400,19 +397,104 @@ int main(int argc, char *argv[])
 	// Decoding
 	else
 	{
-		// TODO (Aiden): Read frequency table as a file (at most 256 characters)
-		// ...
-		// TODO (Aiden): Fill Complete Binary Tree
-		// (Create function for this since done in at least two places)
-		// ...
-		// TODO (Aiden): Create funtionality for searching binary tree using a given bitcode
+		// Open frequency file
+		if((freqs = fopen(argv[4],"r")) == NULL)
+			return 1;
+		
+		// Read the frequency file to get the number of unique characters
+		unique_chars = 0;
+		while((c=fgetc(freqs)) != EOF)
+			unique_chars++;
+		//unique_chars--; // It will count the last line break as unqiue even if there was already a line break, so decrement by 1
+		fclose(freqs);
+
+		// Define frequency table
+		unsigned char freq_table[unique_chars+1]; // will be at most 256 (ascii chars) + 1 (null terminator) bytes long
+		memset(freq_table, '\0', unique_chars+1);
+
+		// Again, open the frequency file
+		if((freqs = fopen(argv[4],"r")) == NULL)
+			return 1;
+		
+		// And now fill the frequency table knowing how many characters to read
+		for(int i = 0; i < unique_chars; i++)
+		{
+			c = fgetc(freqs);
+			ch = c;
+			freq_table[i] = ch;
+		}
+		fclose(freqs);
+
+		// Initialize and fill Complete Binary Tree
+		int code[9] = {-1}; // Initialized at -1 as root symbol doesn't need a bitcode
+		root = createNode(freq_table[0],code,0); // Create root node with symbol with highest frequency
+		fill_tree(root,0,freq_table,sizeof(freq_table),0);
+
+#ifdef TEST
+		// Test to make sure the Binary tree is in the correct order 
+		printf("\nPreorder traversal:\n");
+		preorderTraversal(root);
+		printf("\nPostorder traversal:\n");
+		postorderTraversal(root);
+		printf("\nInorder traversal:\n");
+		inorderTraversal(root);
+#endif
+
+		// TODO: Decompress the levels file with what ever algorithm was used to compress it
 		// ...
 
-		// TODO: Decode compressed binary file bit by bit using levels input file.
+		// Open file contatin the levels of the bitcodes
+		if((lvls = fopen(argv[3],"r")) == NULL)
+			return 1;
+
+		// TODO: With the Complete Binary Tree initialized and levels file decompressd,
+		// we now need functionality to decode a binary file bit by bit to get bitcodes.
 		// (https://stackoverflow.com/questions/2576712/using-python-how-can-i-read-the-bits-in-a-byte) might be useful.
 		// ...
+		
+#ifdef TEST		
+		// For this test we will just use the temporary bitcode file (WHICH IS NOT COMPRESSED TO ACTUAL BITS)
+		// to test the functionality for searching the binary tree by bitcodes (DO NOT KEEP THIS FUNCTIONALITY, ONLY FOR TESTING).
+		if((bitcodes = fopen("bitcodes","r")) == NULL)
+			return 1;
+		
+		// Open output file to write decoded symbols to
+		if((output = fopen("output","w")) == NULL)
+			return 1;
+		
+		// Now read levels and search for symbols
+		int lvl;
+		int bit;
+		while((c = fgetc(lvls)) != EOF)
+		{
+			lvl = c - '0'; // convert to int
+			symbol_node = root; // start from root each time
+			// Now read level amount of bits from the "binary" file
+			// while at the same time traversing the binary tree
+			if(lvl != 0)
+			{
+				for(int i = 0; i < lvl; i++)
+				{
+					c = fgetc(bitcodes);
+					bit = c - '0';
+					if(bit == 0)
+						symbol_node = symbol_node->left;
+					else
+						symbol_node = symbol_node->right;
+				}
+			}
+			fprintf(output,"%c",symbol_node->item);
+		}
+		// Close files related to testing here
+		fclose(bitcodes);
+		fclose(output);
+#endif
+		
+		// Remember to close files used in decoding here
+		fclose(lvls);
 	}
 
+	// Deallocate the dictionary
 	dictDealloc(dict);
 	return 0;
 }
@@ -420,10 +502,10 @@ int main(int argc, char *argv[])
 
 /*
 ENCODING
-	Get the frequency of each symbol from the input stream (DONE)
-	Set the frequency table to the frequency of each symbol (DONE)
-	Create a complete binary tree using the frequency table (DONE)
-	Set the bit codes according to where the symbols are in the tree (DONE)
+	Get the frequency of each symbol from the input stream (AIDEN: DONE)
+	Set the frequency table to the frequency of each symbol (AIDEN: DONE)
+	Create a complete binary tree using the frequency table (AIDEN: DONE)
+	Set the bit codes according to where the symbols are in the tree (AIDEN: DONE)
 	While more symbols to read from the input stream
 		Read one symbol from the input stream
 		Get the symbol’s bit code from the complete binary tree
@@ -438,11 +520,11 @@ ENCODING
 
 /*
 DECODING
-	Read the frequency table from the input stream
-	Create a complete binary tree using the frequency table
+	Read the frequency table from the input stream (AIDEN: DONE)
+	Create a complete binary tree using the frequency table (AIDEN: DONE)
 	Read the compressed level stream from the input stream
 	Uncompress the compressed level stream
-	Read the bit code stream from the input stream
+	Read the bit code stream from the input stream (AIDEN: DONE)
 	While more levels to read from the level stream
 		Read one level from the level stream
 		Read level bits from bit code stream
