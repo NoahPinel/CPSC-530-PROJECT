@@ -39,7 +39,18 @@ The relevant properties of this type of Binary Tree that will be discussed durin
 \end{itemize}
 
 % ...
+\item[\textbf{Q2:}]
+Given the specific binary tree needed for the BCCBT algorithm, where the 
+tree's nodes correspond to symbols in an arbitrary alphabet $\Sigma$.
+Denote a symbol $\phi$, such that $\phi$ is in our arbitrary alphabet $\Sigma$.
+Note, $\phi$ is not the root of the tree.\\
+How is the bit code generated for the symbol $\phi$? 
 
+\item[\textbf{A2:}]
+To find $\phi$'s bit code, we start at the root of the complete binary 
+tree and traverse the tree until we reach the node corresponding to $\phi$. 
+At each step, append the weight of the edge we are traversing to 
+our code. We stop encoding once we reach $\phi$ in the tree.
 \end{enumerate}
 
 \end{document}
