@@ -7,32 +7,32 @@ test-encode1:
 	gcc -o bccbt bccbt.c
 	./bccbt tests/test_file1 "" "" "" 0
 	rm bccbt
-	py bytearray.py
-	lz4 -l lvls
-	rm lvls
+	python3 bytearray.py
+	gzip lvls
 test-encode2:
 	gcc -o bccbt bccbt.c
 	./bccbt tests/test_file2 "" "" "" 0
 	rm bccbt
-	py bytearray.py
-	lz4 -l lvls
-	rm lvls
+	python3 bytearray.py
+	gzip lvls
 test-encode3:
 	gcc -o bccbt bccbt.c
 	./bccbt tests/test_file3 "" "" "" 0
 	rm bccbt
-	py bytearray.py
-	lz4 -l lvls
-	rm lvls
+	python3 bytearray.py
+	gzip lvls
 test-encode4:
 	gcc -o bccbt bccbt.c
 	./bccbt tests/test_file4 "" "" "" 0
-	py bytearray.py
-	lz4 -l lvls
-	rm lvls
-test-pseudo-decode:
+	python3 bytearray.py
+	gzip lvls
+test-decode1:
+	gzip -d lvls.gz
+	python3 bitpull.py
 	gcc -o bccbt bccbt.c
 	./bccbt "" bitcodes lvls freqs 1
+	rm bitcodes lvls freqs binaryfile lamont bccbt
 
+ 
 clean:
 	rm bccbt bitcodes lvls freqs output

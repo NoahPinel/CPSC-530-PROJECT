@@ -11,4 +11,3 @@ f.close()
 
 with open('binaryfile', 'wb') as f:
     BitArray(bin=b).tofile(f)
-

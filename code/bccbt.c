@@ -446,16 +446,11 @@ int main(int argc, char *argv[])
 		// Open file contatin the levels of the bitcodes
 		if((lvls = fopen(argv[3],"r")) == NULL)
 			return 1;
-
-		// TODO: With the Complete Binary Tree initialized and levels file decompressd,
-		// we now need functionality to decode a binary file bit by bit to get bitcodes.
-		// (https://stackoverflow.com/questions/2576712/using-python-how-can-i-read-the-bits-in-a-byte) might be useful.
-		// ...
 		
 #ifdef TEST		
 		// For this test we will just use the temporary bitcode file (WHICH IS NOT COMPRESSED TO ACTUAL BITS)
 		// to test the functionality for searching the binary tree by bitcodes (DO NOT KEEP THIS FUNCTIONALITY, ONLY FOR TESTING).
-		if((bitcodes = fopen("bitcodes","r")) == NULL)
+		if((bitcodes = fopen("lamont","r")) == NULL)
 			return 1;
 		
 		// Open output file to write decoded symbols to
@@ -491,6 +486,7 @@ int main(int argc, char *argv[])
 #endif
 		
 		// Remember to close files used in decoding here
+		// SAFETY FIRST NO LEAKY WEAKIES Xd
 		fclose(lvls);
 	}
 
