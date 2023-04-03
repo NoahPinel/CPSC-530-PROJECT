@@ -3,7 +3,7 @@
 #include <string.h>
 
 #define DEBUG TRUE
-#define TEST TRUE
+//#define TEST TRUE
 
 // ==================================================================================================
 // Integer array copy function adapted from:
@@ -213,7 +213,7 @@ struct node* find_symbol_by_symbol(struct node* root, unsigned char c)
 int main(int argc, char *argv[])
 {
 	// Declare variables used throughout main function
-	FILE *src, *bitcodes, *bin, *lvls, *freqs, *output;
+	FILE *src, *bitcodes, *lvls, *freqs, *output;
 	int c, frequency, max_frequency, unique_chars;
 	unsigned char ch, max_ch;
 	struct node* symbol_node = NULL;
@@ -228,7 +228,7 @@ int main(int argc, char *argv[])
 		// - Need to pass 0 to indicate encoding
 		// If DECODING
 		// - Need to pass Bitcodes in the form of a binary file
-		// - Need to pass Level codes to read binary file
+		// - Need to pass Levels file to read binary file
 		// - Need to pass order of Frequency table to initialize complete binary tree
 		// - Need to pass 1 to indicate decoding
 		printf("Usage: %s SRC BIN LVLS FREQS ENCODE(0)/DECODE(1)\n",argv[0]);
@@ -383,16 +383,6 @@ int main(int argc, char *argv[])
 		fclose(bitcodes);
 		fclose(lvls);
 		fclose(freqs);
-
-		// TODO:
-		// - Can now encode input file symbol by symbol.
-		// - Encoding of the file needs to be written to another file as a string of 1's and 0's (these will be 1 bit characters),
-		//   then pad the file so that the number of 1's and 0's is a multiple of 8,
-		//   then use python (https://stackoverflow.com/questions/7290943/write-a-string-of-1s-and-0s-to-a-binary-file)
-		//   to convert the string of 1's and 0's to a bytearray which can then be written as bits to a binary file.
-		// - The corresponding string of levels of the bitcodes in the binary tree needs to be written to a separate file
-		//   which can be compressed using a different lossless compression algorithm. (lz4 is a native linux compression tool)
-
 	}
 	// Decoding
 	else
@@ -440,17 +430,13 @@ int main(int argc, char *argv[])
 		inorderTraversal(root);
 #endif
 
-		// TODO: Decompress the levels file with what ever algorithm was used to compress it
-		// ...
-
-		// Open file contatin the levels of the bitcodes
+		// Open file containing the levels of the bitcodes
 		if((lvls = fopen(argv[3],"r")) == NULL)
 			return 1;
 		
-#ifdef TEST		
-		// For this test we will just use the temporary bitcode file (WHICH IS NOT COMPRESSED TO ACTUAL BITS)
-		// to test the functionality for searching the binary tree by bitcodes (DO NOT KEEP THIS FUNCTIONALITY, ONLY FOR TESTING).
-		if((bitcodes = fopen("lamont","r")) == NULL)
+		// Open the compressed binary file
+		//if((bitcodes = fopen("lamont","r")) == NULL)
+		if((bitcodes = fopen(argv[2],"r")) == NULL)
 			return 1;
 		
 		// Open output file to write decoded symbols to
@@ -464,7 +450,7 @@ int main(int argc, char *argv[])
 		{
 			lvl = c - '0'; // convert to int
 			symbol_node = root; // start from root each time
-			// Now read level amount of bits from the "binary" file
+			// Now read level amount of bits from the binary file
 			// while at the same time traversing the binary tree
 			if(lvl != 0)
 			{
@@ -480,13 +466,10 @@ int main(int argc, char *argv[])
 			}
 			fprintf(output,"%c",symbol_node->item);
 		}
-		// Close files related to testing here
+		
+		// Close files
 		fclose(bitcodes);
 		fclose(output);
-#endif
-		
-		// Remember to close files used in decoding here
-		// SAFETY FIRST NO LEAKY WEAKIES Xd
 		fclose(lvls);
 	}
 
@@ -498,10 +481,10 @@ int main(int argc, char *argv[])
 
 /*
 ENCODING
-	Get the frequency of each symbol from the input stream (AIDEN: DONE)
-	Set the frequency table to the frequency of each symbol (AIDEN: DONE)
-	Create a complete binary tree using the frequency table (AIDEN: DONE)
-	Set the bit codes according to where the symbols are in the tree (AIDEN: DONE)
+	Get the frequency of each symbol from the input stream
+	Set the frequency table to the frequency of each symbol
+	Create a complete binary tree using the frequency table
+	Set the bit codes according to where the symbols are in the tree
 	While more symbols to read from the input stream
 		Read one symbol from the input stream
 		Get the symbol’s bit code from the complete binary tree
@@ -512,15 +495,13 @@ ENCODING
 	Write the frequency table to the output stream
 	Write the compressed level stream and the bit code stream to the output
 	stream
-*/
 
-/*
 DECODING
-	Read the frequency table from the input stream (AIDEN: DONE)
-	Create a complete binary tree using the frequency table (AIDEN: DONE)
+	Read the frequency table from the input stream
+	Create a complete binary tree using the frequency table
 	Read the compressed level stream from the input stream
 	Uncompress the compressed level stream
-	Read the bit code stream from the input stream (AIDEN: DONE)
+	Read the bit code stream from the input stream
 	While more levels to read from the level stream
 		Read one level from the level stream
 		Read level bits from bit code stream

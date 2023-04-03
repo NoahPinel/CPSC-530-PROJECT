@@ -5,5 +5,5 @@ bit_array = [int(b) for b in bits.bin]
 
 bit_string = ''.join(str(b) for b in bit_array)
 
-with open('lamont', 'w') as f:
+with open('bitcodes', 'w') as f:
     f.write(bit_string)
