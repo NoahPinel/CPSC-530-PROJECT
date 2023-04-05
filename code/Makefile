@@ -29,10 +29,8 @@ test-encode4:
 	rm bccbt bitcodes
 test-decode:
 	gzip -d lvls.gz
+	gzip -d freqs.gz
 	python3 bitpull.py
 	gcc -o bccbt bccbt.c
 	./bccbt "" bitcodes lvls freqs 1
 	rm bitcodes lvls freqs binaryfile bccbt
- 
-clean:
-	rm bccbt bitcodes lvls freqs output binaryfile
