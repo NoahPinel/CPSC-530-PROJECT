@@ -8,6 +8,7 @@
 *.toc
 *.synctex.gz
 *.loe
+*.txt
 bccbt
 freqs
 lvls
