@@ -86,5 +86,4 @@ def main():
     
     output(orig_path,output_list,orig_size,sum_trio)
 
-
 main()
