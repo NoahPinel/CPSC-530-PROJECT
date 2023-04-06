@@ -27,9 +27,39 @@ test-1MBencode:
 	python3 bytearray.py
 	gzip lvls
 	rm bccbt bitcodes
+test-5MBencode:
+	gcc -o bccbt bccbt.c
+	./bccbt battlearena/5MB.txt "" "" "" 0
+	python3 bytearray.py
+	gzip lvls
+	rm bccbt bitcodes	
 test-10MBencode:
 	gcc -o bccbt bccbt.c
 	./bccbt battlearena/10MB.txt "" "" "" 0
+	python3 bytearray.py
+	gzip lvls
+	rm bccbt bitcodes	
+test-20MBencode:
+	gcc -o bccbt bccbt.c
+	./bccbt battlearena/20MB.txt "" "" "" 0
+	python3 bytearray.py
+	gzip lvls
+	rm bccbt bitcodes	
+test-40MBencode:
+	gcc -o bccbt bccbt.c
+	./bccbt battlearena/50MB.txt "" "" "" 0
+	python3 bytearray.py
+	gzip lvls
+	rm bccbt bitcodes	
+test-80MBencode:
+	gcc -o bccbt bccbt.c
+	./bccbt battlearena/80MB.txt "" "" "" 0
+	python3 bytearray.py
+	gzip lvls
+	rm bccbt bitcodes	
+test-100MBencode:
+	gcc -o bccbt bccbt.c
+	./bccbt battlearena/100MB.txt "" "" "" 0
 	python3 bytearray.py
 	gzip lvls
 	rm bccbt bitcodes	
