@@ -21,15 +21,20 @@ test-encode3:
 	python3 bytearray.py
 	gzip lvls
 	rm bccbt bitcodes
-test-encode4:
+test-1MBencode:
 	gcc -o bccbt bccbt.c
-	./bccbt tests/test_file4 "" "" "" 0
+	./bccbt battlearena/1MB.txt "" "" "" 0
 	python3 bytearray.py
 	gzip lvls
 	rm bccbt bitcodes
+test-10MBencode:
+	gcc -o bccbt bccbt.c
+	./bccbt battlearena/10MB.txt "" "" "" 0
+	python3 bytearray.py
+	gzip lvls
+	rm bccbt bitcodes	
 test-decode:
 	gzip -d lvls.gz
-	gzip -d freqs.gz
 	python3 bitpull.py
 	gcc -o bccbt bccbt.c
 	./bccbt "" bitcodes lvls freqs 1
