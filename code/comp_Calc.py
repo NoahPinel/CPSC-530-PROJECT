@@ -24,7 +24,6 @@ Kernel: 5.15.90.1-microsoft-standard-WSL2
 
 Author: Noah Pinel
 Date: 2023-04-05
-Version: 1.0
 """
 import os
 import datetime
@@ -48,13 +47,11 @@ def comp_ratio(orig_file, comp_file):
 
 def output(orig_path,output_list,orig_size,sum_trio):
     program_name = "Compression Stats"
-    version = "V 1.0"
     now = datetime.datetime.now()
     date_time = now.strftime("%Y-%m-%d %H:%M:%S")
 
     print("============================")
     print("{}".format(program_name))
-    print("{}".format(version))
     print("{}".format(date_time))
     print("============================\n")
     print("Original file name: \n- " + orig_path +" "+ '('+ str(orig_size) + ' bits)')
