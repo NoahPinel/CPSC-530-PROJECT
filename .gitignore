@@ -8,8 +8,11 @@
 *.toc
 *.synctex.gz
 *.loe
+*.txt
 bccbt
 freqs
 lvls
 bitcodes
 output
+binaryfile
+lvls.gz

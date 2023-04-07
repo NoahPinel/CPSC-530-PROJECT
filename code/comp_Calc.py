@@ -64,7 +64,7 @@ def output(orig_path,output_list,orig_size,sum_trio):
     print(comp_ratio(orig_size, sum_trio))
 def main():
 
-    orig_path = r"battlearena/1MB.txt"
+    orig_path = r"battlearena/50MB.txt"
     comp_paths = [r"binaryfile", r"freqs", r"lvls.gz"]
     size_bytes = []
         
