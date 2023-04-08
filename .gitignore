@@ -9,6 +9,8 @@
 *.synctex.gz
 *.loe
 *.txt
+*.nav
+*.snm
 bccbt
 freqs
 lvls
