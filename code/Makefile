@@ -1,8 +1,5 @@
 ROOT_DIR := $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
 
-
-all: test-encode1 test-encode2 test-encode3 test-encode4 test-decode
-
 test-encode1:
 	gcc -o bccbt bccbt.c
 	./bccbt tests/test_file1 "" "" "" 0
@@ -47,7 +44,7 @@ test-20MBencode:
 	rm bccbt bitcodes	
 test-40MBencode:
 	gcc -o bccbt bccbt.c
-	./bccbt battlearena/50MB.txt "" "" "" 0
+	./bccbt battlearena/40MB.txt "" "" "" 0
 	python3 bytearray.py
 	gzip lvls
 	rm bccbt bitcodes	
