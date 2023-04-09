@@ -1,0 +1,37 @@
+\documentclass{article}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.16}
+
+\begin{document}
+\begin{tikzpicture}
+\begin{axis}[
+ybar,
+bar width=10pt,
+xlabel=File Size Compressed (mb),
+ylabel=Time (s),
+xmin=0, xmax=6,
+ymin=0, ymax=100,
+xtick={1,2,3,4,5,6},
+xticklabels={1,5,10,20,40,80},
+ytick={0,10,...,100},
+enlarge x limits={abs=1cm},
+title={Comparison of Compressed File sizes},
+]
+\addplot[fill=blue!30, draw=blue] coordinates {
+(2,2)
+};
+\addlegendentry{Huffman}
+
+\addplot[fill=red!30, draw=red] coordinates {
+(1,1)
+};
+\addlegendentry{Gzip}
+
+\addplot[fill=green!30, draw=green] coordinates {
+(3,3)
+};
+\addlegendentry{BCCBT}
+
+\end{axis}
+\end{tikzpicture}
+\end{document}
