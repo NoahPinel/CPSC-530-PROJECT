@@ -1,0 +1,10 @@
+TO COMPILE PAPER PROPERLY WITH REFERENCES YOU NEED TO RUN THE FOLLOWING COMMANDS IN ORDER:
+
+pdflatex CPSC_530_Final_Report_Group17.tex
+bibtex CPSC_530_Final_Report_Group17.aux
+pdflatex CPSC_530_Final_Report_Group17.tex
+pdflatex CPSC_530_Final_Report_Group17.tex
+
+MAKE A NEW COMMAND IN THE MAKEFILE IF YOU WISH TO AUTOMATE THIS WITH A DIFFERENT TEX COMPILER.
+
+https://tex.stackexchange.com/questions/204291/bibtex-latex-compiling

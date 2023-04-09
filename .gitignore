@@ -11,6 +11,9 @@
 *.txt
 *.nav
 *.snm
+*.bbl
+*.bib
+*.blg
 bccbt
 freqs
 lvls

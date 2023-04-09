@@ -1,0 +1,7 @@
+compile:
+	pdflatex CPSC_530_Final_Report_Group17.tex
+	bibtex CPSC_530_Final_Report_Group17.aux
+	pdflatex CPSC_530_Final_Report_Group17.tex
+	pdflatex CPSC_530_Final_Report_Group17.tex
+	xdg-open CPSC_530_Final_Report_Group17.pdf
+	rm references.bib CPSC_530_Final_Report_Group17.aux CPSC_530_Final_Report_Group17.blg CPSC_530_Final_Report_Group17.bbl CPSC_530_Final_Report_Group17.log
