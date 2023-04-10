@@ -176,6 +176,7 @@ specifies the level in the tree.
 
 
 \section{Test Results}
+\subsection{Factors}
 \begin{frame}
 Some factors we will be using to analyze and compare these algorithms are as follows:
 \begin{enumerate}
@@ -185,6 +186,7 @@ Some factors we will be using to analyze and compare these algorithms are as fol
     \item Compression Ratio = $\frac{Compressed\ File\ Size}{Original\ File\ Size}$
 \end{enumerate}
 \end{frame}
+\subsection{Test Result Graphs}
 \begin{frame}
     \begin{tikzpicture}
         \begin{axis}[
@@ -349,6 +351,53 @@ Some factors we will be using to analyze and compare these algorithms are as fol
             \addlegendentry{Compressed file size}
         \end{axis}
         \end{tikzpicture}
+\end{frame}
+
+\begin{frame}
+    \begin{tikzpicture}
+        \begin{axis}[
+            title={Huffman Compression Sizes},
+            xlabel={File size (MB)},
+            ylabel={Size after compression (MB)},
+            ymin=0, ymax=120,
+            ytick={0,20,40,60,80,100,120},
+            xtick={1,2,3,4,5,6},
+            xticklabels={1,5, 10, 20, 40, 80},
+            ybar=5pt,
+            bar width=10pt,
+        ]
+        
+        \addplot[
+            fill=mybabyblue,
+            ]
+            coordinates {
+            (1,1)(2,5)(3,10)(4,20)(5,40)(6,80)
+            };
+            \addlegendentry{Initial file size}
+            
+        \addplot[
+            fill=mysoftgreen,
+            ]
+            coordinates {
+            (1,0.758)(2,3.79)(3,7.58)(4,15.17)(5,30.35)(6,60.7)
+            };
+            \addlegendentry{Compressed file size}
+        \end{axis}
+        \end{tikzpicture}
+\end{frame}
+\subsection{Summary}
+\begin{frame}
+    \frametitle{Result Summary}
+    Huffman and GZip both performed better than the BCCBT algorithm especially during 
+    compression and decompression times.  The main factor behind this run time for the 
+    compression and decompression time is how it was implemented in our code with traversing
+    the tree, this algorithm also requires a lot of memory space for large files.
+    \begin{itemize}
+        \item{BCCBT was slightly behind GZip and Huffman for saving percentages however
+        the gap between them did not grow.}
+        \item{BCCBT fell behind heavily in compression and decompression times as files
+        sizes got larger.}
+    \end{itemize}
 \end{frame}
 
 \section{Conclusion}
