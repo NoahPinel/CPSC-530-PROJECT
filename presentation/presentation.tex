@@ -67,8 +67,8 @@ Bit Code Complete Binary Tree (BCCBT)
 Properties of Complete Binary Trees:
 \begin{itemize}
 \item All levels are completely full except possibly the lowest level.
-\item Filled from left to right at each level. i.e. Tree leans left.
-\item The number of nodes at level $n$ is $2^n$.
+\item Filled from the top down and left to right. i.e. Tree leans left.
+\item The number of nodes at level $n$ is $2^n$ ($n \in \mathbb{Z}_9$).
 \end{itemize}
 \end{frame}
 
@@ -80,7 +80,7 @@ Properties of Complete Binary Trees:
 
 \subsection{Encoding and Decoding}
 \begin{frame}
-    \frametitle{Step 1: Find the frequency Table}
+    \frametitle{Step 1: Find the Frequency Table}
     Given an alphabet $\Sigma =\{a, b, c, d, e, f, g, h\}$ where each symbol has the following frequency\\
     \begin{center}
         \begin{tabular}{ |c|c| } 
@@ -129,7 +129,7 @@ Properties of Complete Binary Trees:
 \end{frame}
 
 \begin{frame}
-    \frametitle{Step 3:Making Uniquely Decodable Strings}
+    \frametitle{Step 3: Making Uniquely Decodable Strings}
 The solution, append the symbols level to its bit code. The bit strings are now uniquely decodable.\\
 \large\textbf{Ex}) Say we want to encode the string `feed',
 encoding would look like this: $[2]00[1]0[1]0[2]01$, where the number between the $[]$ 
@@ -148,10 +148,10 @@ specifies the level in the tree.
 \end{frame}
 
 \begin{frame}
-    \frametitle{Step 4: Decoding an Encrypted String}
+    \frametitle{Step 4: Decoding an Encoded String}
 
     \begin{minipage}[t]{0.6\linewidth}
-        Encrypted String: [1]0[2]01[2]10[1]0
+        Encoded String: [1]0[2]01[2]10[1]0
 
         We first look at [1]. This is telling us the symbol is in LVL 1. The next bit, 0, tells us how we should walk the tree, in this case to the left once. We arrive at symbol e. Iterating through this n times:
 
@@ -387,28 +387,20 @@ Some factors we will be using to analyze and compare these algorithms are as fol
 \end{frame}
 \subsection{Summary}
 \begin{frame}
-    \frametitle{Result Summary}
-    Huffman and GZip both performed better than the BCCBT algorithm especially during 
-    compression and decompression times.  The main factor behind this run time for the 
-    compression and decompression time is how it was implemented in our code with traversing
-    the tree, this algorithm also requires a lot of memory space for large files.
+    Both Huffman and GZip performed better than our implementation of the BCCBT algorithm in every test.
+    Further summarizing our results, we found that:
     \begin{itemize}
-        \item{BCCBT was slightly behind GZip and Huffman for saving percentages however
+        \item{BCCBT fell behind heavily in Compression and Decompression times as files
+        sizes increased, which is due to the lack of optimization done in our
+        implementation of the BCCBT algorithm.}
+        \item{BCCBT was slightly behind GZip and Huffman in Saving Percentages and Compression Ratio, however,
         the gap between them did not grow.}
-        \item{BCCBT fell behind heavily in compression and decompression times as files
-        sizes got larger.}
     \end{itemize}
-\end{frame}
-
-\section{Conclusion}
-\begin{frame}
- Ty should probably add a slide to wrap up what he just talked about, before we say we are done 
- rn the transition does not look natural
 \end{frame}
 
 \section{Q\&A}
 \begin{frame}
-Thank you for listening! Any questions?
+That's all, and thank you for listening! Any questions?
 \end{frame}
 
 \end{document}
