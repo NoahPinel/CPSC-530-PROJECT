@@ -49,6 +49,15 @@ of each unique symbol in the source file? Explain why or why not.
 
 \section{Pseudocode}
 \begin{frame}
+Our project is an implementation of the BCCBT Data Compression Algorithm proposed in 
+Mattias Sjostrand's Master Thesis.
+\begin{center}
+\includegraphics[scale=0.55]{abstract}
+\end{center}
+
+\end{frame}
+
+\begin{frame}
 \begin{center}
 Bit Code Complete Binary Tree (BCCBT)
 \includegraphics[scale=0.55]{pseudocode}
@@ -178,7 +187,19 @@ specifies the level in the tree.
 \section{Test Results}
 \subsection{Factors}
 \begin{frame}
-Some factors we will be using to analyze and compare these algorithms are as follows:
+Our test suite is as follows:
+\begin{itemize}
+\item Construct randomly populated text files with the following command:
+\begin{center}
+\includegraphics[scale=0.65]{command}
+\end{center}
+\item Compare our implemetation of BCCBT with two open-source compression algorithms
+using 4 factors of comparison.
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+The 4 factors we will be using to analyze and compare these algorithms are as follows:
 \begin{enumerate}
     \item Compression Time 
     \item Decompression Time
