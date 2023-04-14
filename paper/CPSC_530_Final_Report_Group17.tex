@@ -34,12 +34,40 @@
 \maketitle
 
 \begin{abstract}
-Elaborate upon each major aspect of the paper.
+%Elaborate upon each major aspect of the paper.
+When storing, transferring, or receiving files it is important to have data compression algorithms to make
+these processes easier and more efficient. In our project we dive into the actual implementation
+of a proposed data compression algorithm. We then compare our implementation to two other widely used 
+data compression algorithms and make conclusions about our implementation based on these comparisons.
 \end{abstract}
 
 \section{Introduction}
-Provides the context and motivates the topic. It introduces the paper/research that is the basis of the project. \cite{Sjostrand}
+%Provides the context and motivates the topic. It introduces the paper/research that is the basis of the project.
+The purpose of this paper is to take a deeper dive into the implementation and comparison of data compression
+algorithms. In the modern age, data compression algorithms have become an integral part of our daily lives.
+These algorithms help us save space on our hard drives, use up less bandwidth,
+speed up communications, and so much more. \\
 
+Unfortunately, all these great benefits do
+not come without costs. In reality, data compression algorithms can be incredibly difficult to devise, and even
+more difficult to implement. 
+Devising a data compression algorithm requires rigorous mathematical justifications for the processes taken, and
+implementing data compression algorithms requires intimate knowledge of optimization and memory management
+techniques. \\
+
+However, once a data compression algorithm is devised and implemented, there will be a need to see how it
+stacks up against the other readily available options. No one algorithm excels at compressing every
+type of data \cite{Sjostrand}, so comparing a data compression algorithm against other available options
+can highlight the areas where an algorithm exceeds, or where it falls behind. The most important factors 
+of comparisons to note are the compression and decompression times, and how much of the original file
+the algorithm is able to save without losing any data in the end.\\
+
+In this study, we focus on the already devised Bit Code Complete Binary Tree (BCCBT) data compression algorithm
+which was
+proposed by Mattias Håkansson Sjöstrand in his Master's Thesis in 2005 \cite{Sjostrand}.
+Using the Pseudocode provided in
+his thesis, we first implemented the algorithm mainly in C with some helper Python scripts, then we used four factors of comparison
+to guage our implementation against two open source data compression algorithms.
 
 \section{Proposed Work}
 Describes the proposed work and evaluation framework (e.g. experiments, data analysis, statistical tests, mathematical proof..).
