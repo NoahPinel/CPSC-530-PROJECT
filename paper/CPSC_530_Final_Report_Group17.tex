@@ -3,6 +3,9 @@
 \usepackage{amsmath}
 \usepackage{pgfplots}
 \usepackage{cite}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{amsfonts}
 \markboth{CPSC 530 - Information Theory and Security - Final Report - Group 17}{Last Name \MakeLowercase{\textit{et al.}}: Title}
 \usepackage{filecontents}
 % Insert references here
@@ -80,15 +83,54 @@ implementation excels, or where it falls behind.
 %Developed software and how it can be evaluated.
 
 \subsection{Implementation}
+Our implementation of the BCCBT data compression algorithm closely follows the pseudocode provided in Sjöstrand's thesis,
+which can observed in Figure 1.
+\begin{figure}
+\centering
+\includegraphics[scale=0.55]{../presentation/images/pseudocode.PNG}
+\caption{\cite{Sjostrand}}
+\end{figure}
 At a high level, our implementation of the BCCBT data compression algorithm can essentially be split up into two different sections,
 those being the implementation of the Complete Binary Tree, and the implementation of the Encoding and Decoding of files.
-To help understand both of these sections we will use an example from the thesis that does an excellent job of explaining
-how the BCCBT algorithm works at a high level.
+To help understand both of these sections we will use example 3-11 from the thesis that as this example does an excellent job of explaining
+how the BCCBT algorithm works at a high level \cite{Sjostrand}.
 Finally, we will briefly discuss the developed software and how it can be evaluated.
+
 \subsubsection{Complete Binary Tree} 
+To start example 3-11, suppose that we have an alphabet 
+\[\Sigma = \{a,b,c,d,e,f,g,h\}\]
+taken from a source file where each symbol has a frequency
+given from the table in Figure 2.
+\begin{figure}
+\centering
+\includegraphics[scale=0.4]{../presentation/images/freqtbl.PNG}
+\caption{\cite{Sjostrand}}
+\end{figure}
+Looking at the pseudocode, we now want to construct a complete binary tree that will allow us to set the bit codes of each
+symbol based on its location in the binary tree. Before we construct the complete binary tree in this example, lets first note some of
+important properties of a complete binary tree:
+\begin{itemize}
+\item All levels of a complete binary tree are completely full except possibly the lowest level.
+\item The complete binary tree is filled in from top down and left to right at each level.
+\item The number of nodes in a complete binary tree at level $n$ is $2^n$ ($n \in \mathbb{Z}_9$).
+\end{itemize}
+The last of these properties is really only important for Theorem 3-1 in the thesis \cite{Sjostrand}, and we do not actually use
+this Theorem's optimization technique in our implementation. Now back to the example, the psuedocode says to construct the complete
+binary tree using the frequency table. This means that we insert the highest frequency symbol $b$ as the root node, then at the
+next level of the binary tree starting from the left we fill in the next highest frequency symbol $e$, then moving one node to
+the right at the same level we fill in the next highest frequency symbol $a$, and so on. Continue this process until there are no
+more unique symbols to add into the binary tree. This will result in the binary tree having the required properties of a complete binary tree.
+The complete binary tree generated in this example can be seen in Figure 3.
+\begin{figure}
+\centering
+\includegraphics[scale=0.6]{../presentation/images/completebinarytree.PNG}
+\caption{\cite{Sjostrand}}
+\end{figure}
+Now with this complete binary tree we will move on to the next section where we can see how the bit codes are generated, how
+the unique symbols are encoded, and how an encoded string can be uniquely decoded.
+
 \subsubsection{Encoding and Decoding}
 \subsubsection{Developed Software}
-The developed software is as follows:
 \begin{itemize}
 \item \textbf{bccbt.c:} This file contains the implementation for both constructing and searching the Complete Binary Tree,
 which in turn contains the implementation for encoding symbols to character arrays of 1's and 0's,
@@ -101,8 +143,7 @@ array of 1's and 0's.
 in order to properly execute our implementation.
 \end{itemize}
 Our software can simply be evaluated through the Makefile which contains pre-built tests for various different file sizes,
-where each of these tests can be edited at the discretion of the user. The system requirements for being able to execute our
-implementation are given in our project GitHub repository \cite{}.
+where each of these tests can be edited at the discretion of the user.
 
 \subsection{Experiments}
 In order to effectively be able to analyze the effectiveness of the BCCBT algorithm we had to 
