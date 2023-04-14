@@ -1,7 +1,11 @@
 \documentclass[12pt]{IEEEtran}
 \usepackage{graphicx}
 \usepackage{amsmath}
+\usepackage{pgfplots}
 \usepackage{cite}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{amsfonts}
 \markboth{CPSC 530 - Information Theory and Security - Final Report - Group 17}{Last Name \MakeLowercase{\textit{et al.}}: Title}
 \usepackage{filecontents}
 % Insert references here
@@ -19,6 +23,8 @@
 \newcommand{\Noah}{Noah Pinel - B.Sc. in Computer Science}
 \newcommand{\Ty}{Ty Irving - B.Sc. in Computer Science}
 
+\definecolor{mybabyblue}{RGB}{140,216,231}
+\definecolor{mysoftgreen}{RGB}{120,233,212}
 
 \begin{document}
 \title{The Implementation and Comparison of the BCCBT Data Compression Algorithm}
@@ -31,26 +37,374 @@
 \maketitle
 
 \begin{abstract}
-Elaborate upon each major aspect of the paper.
+%Elaborate upon each major aspect of the paper.
+When storing, transferring, or receiving files it is important to have data compression algorithms to make
+these processes easier and more efficient. In our project we dive into the actual implementation
+of a proposed data compression algorithm, and use certain factors of comparison to guage our implementation
+against other open source data compression algorithms.
 \end{abstract}
 
 \section{Introduction}
-Provides the context and motivates the topic. It introduces the paper/research that is the basis of the project. \cite{Sjostrand}
+%Provides the context and motivates the topic. It introduces the paper/research that is the basis of the project.
+The purpose of this paper is to take a deeper dive into the implementation and comparison of data compression
+algorithms. In the modern age, data compression algorithms have become an integral part of our daily lives.
+These algorithms help us save space on our hard drives, use up less bandwidth,
+speed up communications, and so much more. \\
 
+Unfortunately, all these great benefits do
+not come without costs. In reality, data compression algorithms can be incredibly difficult to devise, and even
+more difficult to implement. 
+Devising a data compression algorithm requires rigorous mathematical justifications for all the processes taken, and
+then implementing a data compression algorithm requires intimate knowledge of optimization and memory management
+techniques. \\
+
+Once a data compression algorithm is devised and implemented, then there will be a need to see how it
+stacks up against the other readily available options. No one algorithm excels at compressing every
+type of data \cite{Sjostrand}, so comparing a data compression algorithm against other available options
+can highlight the areas where an algorithm exceeds, or where it falls behind. The most important factors 
+of comparisons to note are the compression and decompression times, and how much of the original file
+the algorithm is able to save without losing any data from the source file.\\
+
+In this study, we decided to focus on the already devised Bit Code Complete Binary Tree (BCCBT) data compression algorithm
+which was
+proposed by Mattias Håkansson Sjöstrand in his 2005 Master's Thesis\cite{Sjostrand}.
+Using the pdseudocode provided in
+Sjöstrand's thesis, we first implemented the algorithm, which was written mainly in C with some accompanying Python scripts, then we used four factors of comparison
+to guage our implementation against two other open source data compression algorithms. From these comparisons we make conclusions about where our
+implementation excels, or where it falls behind.
 
 \section{Proposed Work}
-Describes the proposed work and evaluation framework (e.g. experiments, data analysis, statistical tests, mathematical proof..).
+%Describes the proposed work and evaluation framework (e.g. experiments, data analysis, statistical tests, mathematical proof..).
 
 
 \section{Evaluation}
-Implementation and Experiments: what you actually did (objectives, choices, data, and final analysis of results).
-Base comparison: (what is a comparable work, and relating your work to existing works).
-Developed software and how it can be evaluated.
+%Implementation and Experiments: what you actually did (objectives, choices, data, and final analysis of results).
+%Base comparison: (what is a comparable work, and relating your work to existing works).
+%Developed software and how it can be evaluated.
 
+\subsection{Implementation}
+Our implementation of the BCCBT data compression algorithm closely follows the pseudocode provided in Sjöstrand's thesis,
+which can observed in Figure 1.
+\begin{figure}
+\centering
+\includegraphics[scale=0.55]{../presentation/images/pseudocode.PNG}
+\caption{\cite{Sjostrand}}
+\end{figure}
+At a high level, our implementation of the BCCBT data compression algorithm can essentially be split up into two different sections,
+those being the implementation of the Complete Binary Tree, and the implementation of the Encoding and Decoding of files.
+To help understand both of these sections we will use example 3-11 from the thesis that as this example does an excellent job of explaining
+how the BCCBT algorithm works at a high level \cite{Sjostrand}.
+Finally, we will briefly discuss the developed software and how it can be evaluated.
+
+\subsubsection{Complete Binary Tree} 
+To start example 3-11, suppose that we have an alphabet 
+\[\Sigma = \{a,b,c,d,e,f,g,h\}\]
+taken from a source file where each symbol has a frequency
+given from the table in Figure 2.
+\begin{figure}
+\centering
+\includegraphics[scale=0.4]{../presentation/images/freqtbl.PNG}
+\caption{\cite{Sjostrand}}
+\end{figure}
+Looking at the pseudocode, we now want to construct a complete binary tree that will allow us to set the bit codes of each
+symbol based on its location in the binary tree. Before we construct the complete binary tree in this example, lets first note some of
+important properties of a complete binary tree:
+\begin{itemize}
+\item All levels of a complete binary tree are completely full except possibly the lowest level.
+\item The complete binary tree is filled in from top down and left to right at each level.
+\item The number of nodes in a complete binary tree at level $n$ is $2^n$ ($n \in \mathbb{Z}_9$).
+\end{itemize}
+The last of these properties is really only important for Theorem 3-1 in the thesis \cite{Sjostrand}, and we do not actually use
+this Theorem's optimization technique in our implementation. Now back to the example, the psuedocode says to construct the complete
+binary tree using the frequency table. This means that we insert the highest frequency symbol $b$ as the root node, then at the
+next level of the binary tree starting from the left we fill in the next highest frequency symbol $e$, then moving one node to
+the right at the same level we fill in the next highest frequency symbol $a$, and so on. Continue this process until there are no
+more unique symbols to add into the binary tree. This will result in the binary tree having the required properties of a complete binary tree.
+The complete binary tree generated in this example can be seen in Figure 3.
+\begin{figure}
+\centering
+\includegraphics[scale=0.6]{../presentation/images/completebinarytree.PNG}
+\caption{\cite{Sjostrand}}
+\end{figure}
+Now with this complete binary tree we will move on to the next section where we can see how the bit codes are generated, how
+the unique symbols are encoded, and how an encoded string can be uniquely decoded.
+
+\subsubsection{Encoding and Decoding}
+\subsubsection{Developed Software}
+\begin{itemize}
+\item \textbf{bccbt.c:} This file contains the implementation for both constructing and searching the Complete Binary Tree,
+which in turn contains the implementation for encoding symbols to character arrays of 1's and 0's,
+and decoding character arrays of 1's and 0's into their corresponding symbols.
+\item \textbf{bitarray.py:} This file contains the implementation for converting a character array of 1's and 0's
+to actual bits that can be written to a binary file.
+\item \textbf{bitpull.py:} This file contains the implementation for converting a binary file to a character
+array of 1's and 0's.
+\item \textbf{Makefile:} This file contains tests with the required sequence of commands needed
+in order to properly execute our implementation.
+\end{itemize}
+Our software can simply be evaluated through the Makefile which contains pre-built tests for various different file sizes,
+where each of these tests can be edited at the discretion of the user.
+
+\subsection{Experiments}
+In order to effectively be able to analyze the effectiveness of the BCCBT algorithm we had to 
+find two other comparable open source compression algorithms to test against.  As a refresher for 
+the factors that we had used to compare the 3 algorithms against eachother we used the 4 following
+factors
+\begin{enumerate}
+	\item Compression Time
+	\item Decompression Time
+    \item Saving \% = $\frac{Orig\ File\ Size - Compressed\ File\ Size}{Orig\ File\ Size}$
+    \item Compression Ratio = $\frac{Compressed\ File\ Size}{Original\ File\ Size}$
+\end{enumerate}
+Using these factors will enable us to effectively test whether the BCCBT algorithm is both effective 
+for compressing files of differing sizes along with showing whether or not it is practical and
+where the use cases for this compression algorithm.
+\resizebox*{2.8in}{2.5in}{
+\begin{tikzpicture}
+	\begin{axis}[
+		xlabel=File Size (MB),
+		ylabel=Time (s),
+		xmin=0, xmax=6,
+		ymin=0, ymax=100,
+		xtick={1,2,3,4,5,6},
+		xticklabels={1,5,10,20,40,80},   % <---
+		ytick={0,20,...,100},
+		title={Comparison of Compression times}
+				]
+	\addplot[smooth,mark=*,blue] plot coordinates {
+		(1,0.129)(2,0.351)(3,0.625)(4,1.216)(5,2.293)(6,4.443)
+	};
+	\addlegendentry{Huffman}
+	
+	\addplot[smooth,color=red,mark=*]
+		plot coordinates {
+			(1,0.107)(2,0.394)(3,0.638)(4, 1.228)(5,2.472)(6, 4.671)
+	
+		};
+	\addlegendentry{Gzip}
+	\addplot[smooth,color=green,mark=*]
+		plot coordinates {
+			(1,1.485)(2,5.739)(3,11.430)(4,24.864)(5,47.988)(6, 69.076)
+		};
+	\addlegendentry{BCCBT}
+	
+	\end{axis}
+\end{tikzpicture}}\\
+These results indicate that although for low file sizes the compression time is quite similar
+as the file size gets bigger the compression time exponentially gets bigger and the gap between
+both Huffman and GZip gets bigger and bigger this result indicates that for the implementation
+that we made it would not be practical or in your interest to use this on file sizes above 1MB
+however the compression time of this algorithm can be cut down in further implementations of 
+the algorithm.  Through our tests we were able to find out why the compression times of our
+implementation of the BCCBT algorithm were slower than GZip and Huffman and it was due to the
+population of the complete binary tree and traversing through the tree recursively rather than
+iteratively which had a heavy impact on the compression time making the implementation much
+slower when compared to the Huffman and Gzip compression algorithms.
+\resizebox*{2.8in}{2.5in}{
+\begin{tikzpicture}
+	\begin{axis}[
+		xlabel=File Size (MB),
+		ylabel=Time (s),
+		xmin=0, xmax=6,
+		ymin=0, ymax=140,
+		xtick={1,2,3,4,5,6},
+		xticklabels={1,5,10,20,40,80},   % <---
+		ytick={0,20,...,140},
+		title={Comparison of Decompression times}
+				]
+	\addplot[smooth,mark=*,blue] plot coordinates {
+		(1,0.123)(2,0.313)(3,0.561)(4,1.030)(5,1.974)(6, 3.853)
+	};
+	\addlegendentry{Huffman}
+	\addplot[smooth,color=red,mark=*]
+		plot coordinates {
+			(1,0.045)(2,0.092)(3,0.154)(4, 0.269)(5,0.557)(6, 1.091)
+	
+		};
+	\addlegendentry{Gzip}
+	\addplot[smooth,color=green,mark=*]
+		plot coordinates {
+			(1,2.92)(2,7.576)(3,13.611)(4,24.964)(5, 49.321)(6, 100.311)
+		};
+	\addlegendentry{BCCBT}
+	\end{axis}
+\end{tikzpicture}}\\
+The results for the comparision of the decompression times are quite similar to the 
+compression times mainly because while decompressing we use the similar functions to the 
+compression for the files this graph also represents the problem with the optimization of
+the compression and decompression of the implementation of the BCCBT algorithm while at higher
+file sizes.\\
+\resizebox*{2.8in}{2.5in}{
+\begin{tikzpicture}
+	\begin{axis}[
+		xlabel=File Size (MB),
+		ylabel=Saving Percentage (\%),
+		xmin=0, xmax=6,
+		ymin=0, ymax=100,
+		xtick={1,2,3,4,5,6},
+		xticklabels={1,5,10,20,40,80},   % <---
+		ytick={0,10,...,100},
+		title={Comparison of Saving Percentage}
+				]
+	\addplot[smooth,mark=*,blue] plot coordinates {
+		(1,24.95)(2,24.87)(3,24.87)(4,24.87)(5,24.87)(6,24.87)
+	};
+	\addlegendentry{Huffman}
+	
+	\addplot[smooth,color=red,mark=*]
+		plot coordinates {
+			(1,24.39)(2,24.40)(3,24.39)(4,24.39)(5,24.39)(6,24.39)
+		};
+	\addlegendentry{Gzip}
+	\addplot[smooth,color=green,mark=*]
+		plot coordinates {
+			(1,17.37)(2,17.39)(3,17.38)(4,17.39)(5,17.39)(6,17.39)
+		};
+	\addlegendentry{BCCBT}
+	
+	\end{axis}
+\end{tikzpicture}}\\
+The graph above demonstrates the saving percentage in \% which shows the 
+comparision of the different algorithms for compression and the overall
+effectiveness of each one depending on file size, this demonstrates that
+the saving percentage is linear and the gap between the algorithms do not
+end up becoming bigger unlike the compression/decompression times.
+
+\resizebox*{2.8in}{2.5in}{
+\begin{tikzpicture}
+	\begin{axis}[
+		title={BCCBT Compression Sizes},
+		xlabel={File size (MB)},
+		ylabel={Size after compression (MB)},
+		ymin=0, ymax=120,
+		ytick={0,20,40,60,80,100,120},
+		xtick={1,2,3,4,5,6},
+		xticklabels={1,5, 10, 20, 40, 80},
+		ybar=5pt,
+		bar width=10pt,
+	]
+	
+	\addplot[
+		fill=mybabyblue,
+		]
+		coordinates {
+		(1,1)(2,5)(3,10)(4,20)(5,40)(6,80)
+		};
+		\addlegendentry{Initial file size}
+		
+	\addplot[
+		fill=mysoftgreen,
+		]
+		coordinates {
+		(1,0.8)(2,4.17)(3,8.6)(4,16.6)(5,33.3)(6,66.7)
+		};
+		\addlegendentry{Compressed file size}
+	\end{axis}
+\end{tikzpicture}}
+
+\resizebox*{2.8in}{2.5in}{
+\begin{tikzpicture}
+\begin{axis}[
+	title={Gzip Compression Sizes},
+	xlabel={File size (MB)},
+	ylabel={Size after compression (MB)},
+	ymin=0, ymax=120,
+	ytick={0,20,40,60,80,100,120},
+	xtick={1,2,3,4,5,6},
+	xticklabels={1,5, 10, 20, 40, 80},
+	ybar=5pt,
+	bar width=10pt,
+]
+
+\addplot[
+	fill=mybabyblue,
+	]
+	coordinates {
+	(1,1)(2,5)(3,10)(4,20)(5,40)(6,80)
+	};
+	\addlegendentry{Initial file size}
+	
+\addplot[
+	fill=mysoftgreen,
+	]
+	coordinates {
+	(1,0.76)(2,3.8)(3,7.6)(4,15.2)(5,30.5)(6,59)
+	};
+	\addlegendentry{Compressed file size}
+\end{axis}
+\end{tikzpicture}}
+
+\resizebox*{2.8in}{2.5in}{
+\begin{tikzpicture}
+\begin{axis}[
+	title={Huffman Compression Sizes},
+	xlabel={File size (MB)},
+	ylabel={Size after compression (MB)},
+	ymin=0, ymax=120,
+	ytick={0,20,40,60,80,100,120},
+	xtick={1,2,3,4,5,6},
+	xticklabels={1,5, 10, 20, 40, 80},
+	ybar=5pt,
+	bar width=10pt,
+]
+
+\addplot[
+	fill=mybabyblue,
+	]
+	coordinates {
+	(1,1)(2,5)(3,10)(4,20)(5,40)(6,80)
+	};
+	\addlegendentry{Initial file size}
+	
+\addplot[
+	fill=mysoftgreen,
+	]
+	coordinates {
+	(1,0.758)(2,3.79)(3,7.58)(4,15.17)(5,30.35)(6,60.7)
+	};
+	\addlegendentry{Compressed file size}
+\end{axis}
+\end{tikzpicture}}\\
+The compression size graphs for the Huffman, Gzip, and BCCBT all show that no matter
+what the file size is the amount the file size is being reduced by stays linear.  Another
+important part to note about the graph is that the BCCBT does not make the compressed file size
+as small as the other compression algorithms further indicating how the algorithm is not as 
+efficient as the opensource algorithms that we had compared our implementation against. In conclusion
+based on the experiment results that have been presented the BCCBT algorithm is a efficient 
+compression algorithm however the implementation that compresses and decompresses the bitcodes,
+lvls, and frequency files make the distinction of usability clear as the implementation of the 
+BCCBT algorithm performs much slower making it less practical for high file sizes.
+
+\section{Findings and Conclusion}
+Overall the results of our experiments have shown us that the algorithm performs slightly worse
+when compared to the open sourced compression algorithms that were used as comparision.  Although 
+the results for the time of compression and decompression were heavily influenced by the time available
+in order to implement the compression algorithm from scratch the compression sizes were quite similar to 
+the algorithms used to compare.  The main takeaway from the results is that no matter the file size 
+it stays constant on the size that the source file is going to be compressed into and it does not deviate 
+unlike the time used to compress and decompress.  We can say with confidence that the compression algorithm
+proposed is an effective algorithm to used to compress any file size given time does not play a factor.
 
 \section{Planning and Execution}
-Compares the final work with the project proposal: comments on if the stated goals have been achieved, and if not, outlines the challenges.
-Outlines contributions of group members including, ideas, implementation, research, writing report.
+%Compares the final work with the project proposal: comments on if the stated goals have been achieved, and if not, outlines the challenges.
+%Outlines contributions of group members including, ideas, implementation, research, writing report.\\
+
+When comparing our final work with the project proposal, it is clear to see that we were effectively able
+to achieve our main goal which was to implement the BCCBT algorithm in order to compare it against other
+compression algorithms.  Having been able to successfully implement the BCCBT compression algorithm we 
+also had to compare it against some other compression techniques and we were successfully able to achieve 
+that as well and the results that we achieved were as expected.  The largest challenge within our
+project was successfully implementing the BCCBT algorithm since we had to write the compression and 
+decompression from scratch, this majorily impacted us because of the time constraint we had for this 
+project the optimization of the code implemented was not as optimal as it could have been.  Given more 
+time or any future work on this project it would be able to yield better results due to optimization.\\
+
+The work throughout this assignment was mainly split across the group members for every segment that 
+we split the project up into.  All members of the group worked on the implementation splitting that 
+into encoding and decoding along with the setup of the binary trees used within those functions.  The 
+presentation and papers were evenly split, with each group member working on their assigned seciton mainly
+focusing on what they did during the implementation and research.
+
 
 \bibliographystyle{IEEEtran}
 \bibliography{references}
