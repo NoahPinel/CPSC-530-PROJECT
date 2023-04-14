@@ -3,6 +3,7 @@
 \usepackage{amsmath}
 \usepackage{pgfplots}
 \usepackage{cite}
+\usepackage{caption}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
 \usepackage{amsfonts}
@@ -67,7 +68,7 @@ the algorithm is able to save without losing any data from the source file.\\
 
 In this study, we decided to focus on the already devised Bit Code Complete Binary Tree (BCCBT) data compression algorithm
 which was
-proposed by Mattias Håkansson Sjöstrand in his 2005 Master's Thesis\cite{Sjostrand}.
+proposed by Mattias Håkansson Sjöstrand in his 2005 Master's Thesisframework.
 Using the pdseudocode provided in
 Sjöstrand's thesis, we first implemented the algorithm, which was written mainly in C with some accompanying Python scripts, then we used four factors of comparison
 to guage our implementation against two other open source data compression algorithms. From these comparisons we make conclusions about where our
@@ -75,8 +76,20 @@ implementation excels, or where it falls behind.
 
 \section{Proposed Work}
 %Describes the proposed work and evaluation framework (e.g. experiments, data analysis, statistical tests, mathematical proof..).
+Our proposed work is intended to be a re-implementation of the BCCBT algorithm proposed by Sjostrand for data compression. 
+To achieve this goal, we have proposed a three-part effort that involves implementing the BCCBT algorithm, testing its performance on 
+various sized text files, and evaluating its effectiveness compared to state-of-the-art compression algorithms. By undertaking this 
+project, we aim to contribute to the field of data compression and provide insights into the effectiveness of the BCCBT algorithm.
 
-
+To begin our work, we first configured the necessary software to emulate the BCCBT algorithm. This involved developing a collection of Python 
+programs and a main C program to enable us to accurately simulate the algorithm's behavior.
+Next, we evaluated the performance of the BCCBT algorithm by conducting tests to measure its 
+compression effectiveness against two other popular compression algorithms, Huffman and DEFLATE. 
+To perform these tests, we used a diverse set of six .txt files of varying sizes, ranging from 1MB to 80MB. 
+By comparing the compression ratios and processing speeds of each algorithm, we were able to determine the effectiveness of the BCCBT algorithm.
+Finally, we assessed the effectiveness of our implementation by replicating the evaluation process described in the original paper \cite{Sjostrand}. 
+Using the same metrics as the original work, we measured various compression thresholds to compare our results with his.\\ 
+Overall, this framework allowed for us to accurately develop and test our results seamlessly while still being precise with our scientific approach.
 \section{Evaluation}
 %Implementation and Experiments: what you actually did (objectives, choices, data, and final analysis of results).
 %Base comparison: (what is a comparable work, and relating your work to existing works).
@@ -85,10 +98,10 @@ implementation excels, or where it falls behind.
 \subsection{Implementation}
 Our implementation of the BCCBT data compression algorithm closely follows the pseudocode provided in Sjöstrand's thesis,
 which can observed in Figure 1.
-\begin{figure}
+\begin{figure}[h]
 \centering
 \includegraphics[scale=0.55]{../presentation/images/pseudocode.PNG}
-\caption{\cite{Sjostrand}}
+\caption{Pseudocode from \cite{Sjostrand}}
 \end{figure}
 At a high level, our implementation of the BCCBT data compression algorithm can essentially be split up into two different sections,
 those being the implementation of the Complete Binary Tree, and the implementation of the Encoding and Decoding of files.
@@ -104,7 +117,7 @@ given from the table in Figure 2.
 \begin{figure}
 \centering
 \includegraphics[scale=0.4]{../presentation/images/freqtbl.PNG}
-\caption{\cite{Sjostrand}}
+\caption{Adapted frequency table from \cite{Sjostrand}}
 \end{figure}
 Looking at the pseudocode, we now want to construct a complete binary tree that will allow us to set the bit codes of each
 symbol based on its location in the binary tree. Before we construct the complete binary tree in this example, lets first note some of
@@ -124,12 +137,100 @@ The complete binary tree generated in this example can be seen in Figure 3.
 \begin{figure}
 \centering
 \includegraphics[scale=0.6]{../presentation/images/completebinarytree.PNG}
-\caption{\cite{Sjostrand}}
+\caption{Complete binary tree used in \cite{Sjostrand}}
 \end{figure}
-Now with this complete binary tree we will move on to the next section where we can see how the bit codes are generated, how
-the unique symbols are encoded, and how an encoded string can be uniquely decoded.
 
 \subsubsection{Encoding and Decoding}
+In this section we will walk the reader through an example run-through of the algorithm.
+Below we will demonstrate the three main steps in encoding and decoding using the BCCBT algorithm, it is important
+to note that this is merely a toy example for the purpose of understating.\newline
+Firstly, we need to produce a frequency table, this table is ordered from the highest occurrences to lowest.
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.35]{../presentation/images/freqtbl.png}
+    \captionsetup{justification=centering}
+    \caption{Frequency table for symbols}
+\end{figure}
+\\
+Once we have created the frequency table for our alphabet $\Sigma$, we can use it to construct a complete binary tree. 
+The highest occurring symbol in $\Sigma$ is placed at the root of the tree, and the remaining symbols are added to the 
+tree from left to right in order of their appearance in the frequency table. Note, If we were to traverse the binary tree that we constructed 
+and record the symbols that we encounter as we move from left to right, we will obtain the same sequence of symbols as in the original 
+frequency table, provided that the tree has been constructed correctly. Below is the corresponding complete binary tree that we will use 
+for this demonstration.
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.35]{../presentation/images/bintree.png}
+    \captionsetup{justification=centering}
+    \caption{Complete binary tree}
+\end{figure}
+\\
+We have now set the bedrock for everything we need to do with our algorithm, whether it be encoding a string, or decoding 
+an encoded one. Before we get to encoding we need to establish the last piece of the puzzle, that is, the corresponding 
+bit codes for the symbols in $\Sigma$. In order to generate the bitcodes for each node in the tree, we must follow some simple steps
+to retrieve them. The process is simple, 
+\begin{enumerate}
+	\item Position yourself at the root node of the tree
+	\item Traverse the tree, keeping note of the weights on every edge the was needed to get to your desired symbol
+	\item After reaching your symbol, you should have a string of 1's and 0's that act like coordinates for finding the specific node.
+\end{enumerate}
+So, for example, if we wanted to find the bitcode for the symbol `h', we start at the root of our tree and traverse
+two right edges, b to a and then a to h, concatenating the edge weights we saw in our walk we get the bitcode 11 for node h. Lastly, before we move on
+it is important to note that the root of the binary tree i.e. the most occurring symbol in $\Sigma$ take no bitcode value, it is set as null.
+Below is the complete table of bitcodes corresponding to all of our symbols in $\Sigma$.\\
+\begin{center}
+	\begin{tabular}{|c|c|c|c|c|c|c|c|}
+		\hline
+		\multicolumn{8}{|c|}{BIT CODES} \\
+		\hline
+		a & b & c & d & e & f & g & h \\
+		\hline
+		1  & NULL  & 000  & 01  & 0  & 00  & 10  & 11\\
+		\hline
+	\end{tabular}\\
+	\vspace{0.1in}
+	Table of bitcodes
+\end{center}
+This is good and all, but unfortunately, 
+there is a problem with the current bit codes we have constructed from the frequency table. They are not sufficient to encode a string because they are not 
+uniquely decodable. This means that a stranger looking at the complete binary tree alone would not be able to determine what the following string 111' corresponds to - 
+is it three a's or one h' followed by an a'? This lack of uniqueness means that we cannot decode the encoded string without losing information, and if we cannot decode it,
+we cannot expect a computer to be able to do so either. Therefore, we need to modify our bit codes to ensure that they are uniquely decodable. The way that the BCCBT algorithm 
+handles this is quite clever, a simple yet elegant tactic that will allow for us to uniquely decode, what we do is simply take the corresponding level where the symbol node 
+lays in the tree, and prepend that level value to the bitcode, so for example, `h' had a bitcode `11' but after making this change the bitcode is now [2]11, So with this now, there
+can't be any confusion, you note that the symbol is on the second level of our tree, and then take the walk given, 1, then 1 again, and we arrive at h! This is everything we need,
+we can now generate uniquely decodable strings that will allow lossless decoding.\\
+\\
+Lets encode the word `edge'. Using our binary tree we take note of the following 3 bitcodes that are generated by iterating the 
+simple bitcode generation steps.
+\begin{enumerate}
+	\item e $\rightarrow$ [1]0
+	\item d $\rightarrow$ [2]01
+	\item g $\rightarrow$ [2]10
+\end{enumerate}
+we now have our encoded string
+\begin{equation*}
+	\text{`edge' } \rightarrow [1]0[2]01[2]10[1]0
+\end{equation*}
+we can now proceed to simulate the decoding of this string.\\
+\\
+To decode the encoded string [1]0[2]01[2]10[1]0', we first create a complete binary tree, which we'll need for decoding. 
+The decoding process is almost as simple as encoding. We begin by examining the first level token, [1]', and extracting all the 
+bitcodes between this level token and the next one. In this case, we find the code 0' and stop grouping since the next character is a 
+level bracket. This gives us our first encoding block, [1]0'. We know with certainty that the desired symbol is in the first level, and we can 
+find it by traversing one 0 edge down. In this case, we land on the symbol `e'. We repeat this process for the rest of the string, resulting in the 
+following decoding mappings:
+\begin{enumerate}
+	\item [1]0 $\rightarrow$ e
+	\item [2]01 $\rightarrow$ d
+	\item [2]10 $\rightarrow$ g
+	\item [1]0 $\rightarrow$ e
+\end{enumerate}
+which tells us that our decoded string is 
+\begin{equation*}
+	[1]0[2]01[2]10[1]0 \rightarrow \text{` edge' }
+\end{equation*}
+and with that we conclude this thorough example of how the BCCBT algorithm goes about encoding and decoding strings of text.\\
 \subsubsection{Developed Software}
 \begin{itemize}
 \item \textbf{bccbt.c:} This file contains the implementation for both constructing and searching the Complete Binary Tree,
