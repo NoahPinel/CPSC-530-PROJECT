@@ -282,9 +282,37 @@ based on the experiment results that have been presented the BCCBT algorithm is 
 compression algorithm however the implementation that compresses and decompresses the bitcodes,
 lvls, and frequency files make the distinction of usability clear as the implementation of the 
 BCCBT algorithm performs much slower making it less practical for high file sizes.
+
+\section{Findings and Conclusion}
+Overall the results of our experiments have shown us that the algorithm performs slightly worse
+when compared to the open sourced compression algorithms that were used as comparision.  Although 
+the results for the time of compression and decompression were heavily influenced by the time available
+in order to implement the compression algorithm from scratch the compression sizes were quite similar to 
+the algorithms used to compare.  The main takeaway from the results is that no matter the file size 
+it stays constant on the size that the source file is going to be compressed into and it does not deviate 
+unlike the time used to compress and decompress.  We can say with confidence that the compression algorithm
+proposed is an effective algorithm to used to compress any file size given time does not play a factor.
+
 \section{Planning and Execution}
 Compares the final work with the project proposal: comments on if the stated goals have been achieved, and if not, outlines the challenges.
-Outlines contributions of group members including, ideas, implementation, research, writing report.
+Outlines contributions of group members including, ideas, implementation, research, writing report.\\
+
+When comparing our final work with the project proposal, it is clear to see that we were effectively able
+to achieve our main goal which was to implement the BCCBT algorithm in order to compare it against other
+compression algorithms.  Having been able to successfully implement the BCCBT compression algorithm we 
+also had to compare it against some other compression techniques and we were successfully able to achieve 
+that as well and the results that we achieved were as expected.  The largest challenge within our
+project was successfully implementing the BCCBT algorithm since we had to write the compression and 
+decompression from scratch, this majorily impacted us because of the time constraint we had for this 
+project the optimization of the code implemented was not as optimal as it could have been.  Given more 
+time or any future work on this project it would be able to yield better results due to optimization.\\
+
+The work throughout this assignment was mainly split across the group members for every segment that 
+we split the project up into.  All members of the group worked on the implementation splitting that 
+into encoding and decoding along with the setup of the binary trees used within those functions.  The 
+presentation and papers were evenly split, with each group member working on their assigned seciton mainly
+focusing on what they did during the implementation and research.
+
 
 \bibliographystyle{IEEEtran}
 \bibliography{references}
